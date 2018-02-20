@@ -9,21 +9,38 @@ public class PlayerController : MonoBehaviour {
     [SerializeField]
     float minJumpForce = 0.25f;
     [SerializeField]
+    float initialMovementSpeed = 1f;
+    [SerializeField]
     LayerMask groundLayer;
     [SerializeField]
-    float groundRaycastLength = 0.6f;
+    LayerMask wallLayer;
+    [SerializeField]
+    float raycastLength = 0.6f;
 
-
+    float currentMovementSpeed;
+    float currentDirection;
     Rigidbody2D rBody;
 
 	// Use this for initialization
 	void Start () {
         rBody = GetComponent<Rigidbody2D>();
-	}
+        rBody.velocity = new Vector3(initialMovementSpeed, rBody.velocity.y, 0f);
+        currentMovementSpeed = initialMovementSpeed;
+        currentDirection = Mathf.Sign(currentMovementSpeed);
+    }
 	
 	// Update is called once per frame
 	void Update () {
-		if(Input.GetKeyDown(KeyCode.Space) && GroundCheck())
+        rBody.velocity = new Vector3(currentMovementSpeed, rBody.velocity.y, 0f);
+
+        if(WallCheck())
+        {
+            currentDirection *= -1;
+            currentMovementSpeed *= -1;
+            rBody.velocity = new Vector3(currentMovementSpeed, rBody.velocity.y, 0f);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space) && GroundCheck())
         {
             rBody.velocity = new Vector3(rBody.velocity.x, maxJumpForce, 0f); 
         }
@@ -33,17 +50,26 @@ public class PlayerController : MonoBehaviour {
             rBody.velocity = new Vector3(rBody.velocity.x, minJumpForce, 0f);
         }
 
-        Debug.DrawRay(transform.position, Vector3.down * groundRaycastLength, Color.red);
+        Debug.DrawRay(transform.position, Vector3.right * raycastLength, Color.red);
     }
       
     bool GroundCheck()
     {
-        if (Physics2D.Raycast(transform.position, Vector3.down, groundRaycastLength, groundLayer))
+        if (Physics2D.Raycast(transform.position, Vector3.down, raycastLength, groundLayer))
         {
             return true;
-            Debug.Log("wtf");
         }
-        Debug.Log("sa marche pas");
+
+        return false;
+    }
+
+    bool WallCheck()
+    {
+        if (Physics2D.Raycast(transform.position, Vector3.right * currentDirection, raycastLength, wallLayer))
+        {
+            return true;
+        }
+
         return false;
     }
 }
