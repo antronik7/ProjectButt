@@ -4,12 +4,21 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
 
+    enum PlayerState
+    {
+        Running,
+        Jumping,
+        GroundPounding
+    }
+
     [SerializeField]
     float maxJumpForce = 1f;
     [SerializeField]
     float minJumpForce = 0.25f;
     [SerializeField]
     float initialMovementSpeed = 1f;
+    [SerializeField]
+    float groundPoundForce = 1f;
     [SerializeField]
     LayerMask groundLayer;
     [SerializeField]
@@ -19,19 +28,35 @@ public class PlayerController : MonoBehaviour {
 
     float currentMovementSpeed;
     float currentDirection;
+    PlayerState playerState;
+
     Rigidbody2D rBody;
+    float gravityScale;
+    Animator animator;
 
 	// Use this for initialization
 	void Start () {
         rBody = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
+
+        playerState = PlayerState.Jumping;
         rBody.velocity = new Vector3(initialMovementSpeed, rBody.velocity.y, 0f);
+        gravityScale = rBody.gravityScale;
         currentMovementSpeed = initialMovementSpeed;
         currentDirection = Mathf.Sign(currentMovementSpeed);
     }
 	
 	// Update is called once per frame
 	void Update () {
-        rBody.velocity = new Vector3(currentMovementSpeed, rBody.velocity.y, 0f);
+        if(playerState != PlayerState.Running && GroundCheck())
+        {
+            playerState = PlayerState.Running;
+        }
+
+        if(playerState == PlayerState.Running)
+        {
+            Walk();
+        }
 
         if(WallCheck())
         {
@@ -40,19 +65,55 @@ public class PlayerController : MonoBehaviour {
             rBody.velocity = new Vector3(currentMovementSpeed, rBody.velocity.y, 0f);
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && GroundCheck())
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            rBody.velocity = new Vector3(rBody.velocity.x, maxJumpForce, 0f); 
+            if(playerState == PlayerState.Running)
+            {
+                Jump(maxJumpForce);
+            }
+            else if (playerState == PlayerState.Jumping)
+            {
+                StartGroundPound();
+            }
         }
 
-        if(Input.GetKeyUp(KeyCode.Space) && rBody.velocity.y > minJumpForce)
+        if(Input.GetKeyUp(KeyCode.Space))
         {
-            rBody.velocity = new Vector3(rBody.velocity.x, minJumpForce, 0f);
+            if(playerState != PlayerState.GroundPounding && rBody.velocity.y > minJumpForce)
+            {
+                Jump(minJumpForce);
+            }
         }
 
         Debug.DrawRay(transform.position, Vector3.right * raycastLength, Color.red);
     }
-      
+
+    void Walk()
+    {
+        rBody.velocity = new Vector3(currentMovementSpeed, rBody.velocity.y, 0f);
+    }
+
+    void Jump(float jumpForce)
+    {
+        playerState = PlayerState.Jumping;
+        rBody.velocity = new Vector3(rBody.velocity.x, jumpForce, 0f);
+    }
+
+    void StartGroundPound()
+    {
+        playerState = PlayerState.GroundPounding;
+        rBody.velocity = Vector3.zero;
+        rBody.gravityScale = 0;
+        animator.SetTrigger("GroundPound");
+    }
+
+    void EndGroundPound()
+    {
+        animator.SetTrigger("StopGroundPound");
+        rBody.gravityScale = gravityScale;
+        rBody.velocity = new Vector3(0f, groundPoundForce * -1, 0f);
+    }
+
     bool GroundCheck()
     {
         if (Physics2D.Raycast(transform.position, Vector3.down, raycastLength, groundLayer))
