@@ -679,7 +679,7 @@ MonoBehaviour:
   maxJumpForce: 5
   minJumpForce: 2
   initialMovementSpeed: 2.5
-  groundPoundForce: 3
+  groundPoundForce: 5
   groundLayer:
     serializedVersion: 2
     m_Bits: 256

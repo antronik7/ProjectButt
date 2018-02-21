@@ -48,21 +48,9 @@ public class PlayerController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if(playerState != PlayerState.Running && GroundCheck())
-        {
-            playerState = PlayerState.Running;
-        }
-
         if(playerState == PlayerState.Running)
         {
             Walk();
-        }
-
-        if(WallCheck())
-        {
-            currentDirection *= -1;
-            currentMovementSpeed *= -1;
-            rBody.velocity = new Vector3(currentMovementSpeed, rBody.velocity.y, 0f);
         }
 
         if (Input.GetKeyDown(KeyCode.Space))
@@ -86,6 +74,22 @@ public class PlayerController : MonoBehaviour {
         }
 
         Debug.DrawRay(transform.position, Vector3.right * raycastLength, Color.red);
+        Debug.Log(playerState);
+    }
+
+    private void FixedUpdate()
+    {
+        if (GroundCheck())
+        {
+            playerState = PlayerState.Running;
+        }
+
+        if (WallCheck())
+        {
+            currentDirection *= -1;
+            currentMovementSpeed *= -1;
+            rBody.velocity = new Vector3(currentMovementSpeed, rBody.velocity.y, 0f);
+        }
     }
 
     void Walk()
@@ -116,7 +120,7 @@ public class PlayerController : MonoBehaviour {
 
     bool GroundCheck()
     {
-        if (Physics2D.Raycast(transform.position, Vector3.down, raycastLength, groundLayer))
+        if (rBody.velocity.y <= 0 && Physics2D.Raycast(transform.position, Vector3.down, raycastLength, groundLayer))
         {
             return true;
         }
