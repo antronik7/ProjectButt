@@ -122,8 +122,9 @@ GameObject:
   m_Component:
   - component: {fileID: 27453339}
   - component: {fileID: 27453338}
+  - component: {fileID: 27453340}
   m_Layer: 8
-  m_Name: Temp_Platform
+  m_Name: Block11
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -178,6 +179,30 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &27453340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 27453337}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee58abc4dc3b0c64dbf304536902bc07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  blockHP: 3
+  blockSprites:
+  - {fileID: 576036176}
+  - {fileID: 123967355}
+  - {fileID: 839118411}
+  - {fileID: 1503212321}
+  - {fileID: 1775864132}
+  - {fileID: 176683612}
+  - {fileID: 843790148}
+  - {fileID: 1577963427}
+  - {fileID: 1216706313}
+  - {fileID: 1116688240}
+  - {fileID: 1143276029}
 --- !u!1 &123967353
 GameObject:
   m_ObjectHideFlags: 0
@@ -676,10 +701,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e7e3b7b43915a946bedb727b3ac9912, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allowHoldJump: 0
   maxJumpForce: 5
   minJumpForce: 2
   initialMovementSpeed: 2.5
-  groundPoundForce: 5
+  groundPoundForce: 6
+  playerDamage: 1
   groundLayer:
     serializedVersion: 2
     m_Bits: 256

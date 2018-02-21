@@ -12,6 +12,8 @@ public class PlayerController : MonoBehaviour {
     }
 
     [SerializeField]
+    bool allowHoldJump = true;
+    [SerializeField]
     float maxJumpForce = 1f;
     [SerializeField]
     float minJumpForce = 0.25f;
@@ -19,6 +21,8 @@ public class PlayerController : MonoBehaviour {
     float initialMovementSpeed = 1f;
     [SerializeField]
     float groundPoundForce = 1f;
+    [SerializeField]
+    int playerDamage = 1;
     [SerializeField]
     LayerMask groundLayer;
     [SerializeField]
@@ -48,11 +52,14 @@ public class PlayerController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if(playerState == PlayerState.Running)
+        // States
+        if (playerState == PlayerState.Running)
         {
             Walk();
         }
 
+
+        // Inputs
         if (Input.GetKeyDown(KeyCode.Space))
         {
             if(playerState == PlayerState.Running)
@@ -65,7 +72,7 @@ public class PlayerController : MonoBehaviour {
             }
         }
 
-        if(Input.GetKeyUp(KeyCode.Space))
+        if(allowHoldJump && Input.GetKeyUp(KeyCode.Space))
         {
             if(playerState != PlayerState.GroundPounding && rBody.velocity.y > minJumpForce)
             {
@@ -73,15 +80,24 @@ public class PlayerController : MonoBehaviour {
             }
         }
 
-        Debug.DrawRay(transform.position, Vector3.right * raycastLength, Color.red);
-        Debug.Log(playerState);
+        //Debug.DrawRay(transform.position, Vector3.right * raycastLength, Color.red);
+        //Debug.Log(playerState);
     }
 
     private void FixedUpdate()
     {
         if (GroundCheck())
         {
-            playerState = PlayerState.Running;
+            if (playerState == PlayerState.GroundPounding)
+            {
+                playerState = PlayerState.Running;
+                RaycastHit2D hitResult = Physics2D.Raycast(transform.position, Vector3.down, raycastLength, groundLayer);// FUNCTION FUNCTION FUNCTION
+                hitResult.transform.GetComponent<BlockController>().DamageBlock(playerDamage);
+            }
+            else
+            {
+                playerState = PlayerState.Running;
+            }
         }
 
         if (WallCheck())
