@@ -22,7 +22,13 @@ public class PlayerController : MonoBehaviour {
     [SerializeField]
     float groundPoundForce = 1f;
     [SerializeField]
-    int playerDamage = 1;
+    int minimumPlayerDamage = 1;
+    [SerializeField]
+    int maximumPlayerDamage = 3;
+    [SerializeField]
+    float percentageDamageMinimum = 0.2f;
+    [SerializeField]
+    float percentageDamageMaximum = 0.8f;
     [SerializeField]
     LayerMask groundLayer;
     [SerializeField]
@@ -32,6 +38,9 @@ public class PlayerController : MonoBehaviour {
 
     float currentMovementSpeed;
     float currentDirection;
+    float startJumpHeight = 0;
+    float startGPHeight = 0;
+    float maxJumpY = 0;
     PlayerState playerState;
 
     Rigidbody2D rBody;
@@ -48,6 +57,11 @@ public class PlayerController : MonoBehaviour {
         gravityScale = rBody.gravityScale;
         currentMovementSpeed = initialMovementSpeed;
         currentDirection = Mathf.Sign(currentMovementSpeed);
+
+        float g = rBody.gravityScale * Physics2D.gravity.magnitude;
+        float v0 = maxJumpForce / rBody.mass; // converts the jumpForce to an initial velocity
+        maxJumpY = (v0 * v0) / (2 * g) - 0.04f;
+        Debug.Log(maxJumpY);
     }
 	
 	// Update is called once per frame
@@ -64,6 +78,7 @@ public class PlayerController : MonoBehaviour {
         {
             if(playerState == PlayerState.Running)
             {
+                startJumpHeight = transform.position.y;
                 Jump(maxJumpForce);
             }
             else if (playerState == PlayerState.Jumping)
@@ -92,7 +107,7 @@ public class PlayerController : MonoBehaviour {
             {
                 playerState = PlayerState.Running;
                 RaycastHit2D hitResult = Physics2D.Raycast(transform.position, Vector3.down, raycastLength, groundLayer);// FUNCTION FUNCTION FUNCTION
-                hitResult.transform.GetComponent<BlockController>().DamageBlock(playerDamage);
+                hitResult.transform.GetComponent<BlockController>().DamageBlock(CalculateDamage());
             }
             else
             {
@@ -121,6 +136,7 @@ public class PlayerController : MonoBehaviour {
 
     void StartGroundPound()
     {
+        startGPHeight = transform.position.y;
         playerState = PlayerState.GroundPounding;
         rBody.velocity = Vector3.zero;
         rBody.gravityScale = 0;
@@ -152,5 +168,25 @@ public class PlayerController : MonoBehaviour {
         }
 
         return false;
+    }
+
+    int CalculateDamage()
+    {
+        float heightGP = startGPHeight - startJumpHeight;
+        float percentage = heightGP / maxJumpY;
+
+        int damage;
+        if (percentage <= percentageDamageMinimum)
+            damage = minimumPlayerDamage;
+        else if (percentage >= percentageDamageMaximum)
+            damage = maximumPlayerDamage;
+        else
+        {
+            int microDamage = maximumPlayerDamage - minimumPlayerDamage;
+            float microPercent = (percentage - percentageDamageMinimum) / (percentageDamageMaximum - percentageDamageMinimum);
+            damage = ((int)(microDamage * microPercent)) + minimumPlayerDamage;
+        }
+
+        return damage;
     }
 }
