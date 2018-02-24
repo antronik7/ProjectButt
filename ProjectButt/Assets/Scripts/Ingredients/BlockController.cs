@@ -5,7 +5,7 @@ using UnityEngine;
 public class BlockController : MonoBehaviour {
 
     [SerializeField]
-    int blockHP = 3;
+    int blockHP = 5;
     [SerializeField]
     SpriteRenderer[] blockSprites;
 
