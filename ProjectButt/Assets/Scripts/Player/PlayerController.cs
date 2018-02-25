@@ -12,6 +12,8 @@ public class PlayerController : MonoBehaviour {
     }
 
     [SerializeField]
+    int playerHP = 1;
+    [SerializeField]
     bool allowHoldJump = true;
     [SerializeField]
     float maxJumpForce = 1f;
@@ -30,6 +32,12 @@ public class PlayerController : MonoBehaviour {
     [SerializeField]
     float percentageDamageMaximum = 0.8f;
     [SerializeField]
+    float cameraShakeTime = 1f;
+    [SerializeField]
+    float cameraShakeSpeed = 1f;
+    [SerializeField]
+    float cameraShakeMagnitude = 1f;
+    [SerializeField]
     LayerMask groundLayer;
     [SerializeField]
     LayerMask wallLayer;
@@ -38,6 +46,7 @@ public class PlayerController : MonoBehaviour {
 
     float currentMovementSpeed;
     float currentDirection;
+    int currentPlayerHP;
     float startJumpHeight = 0;
     float startGPHeight = 0;
     float maxJumpY = 0;
@@ -55,13 +64,14 @@ public class PlayerController : MonoBehaviour {
         playerState = PlayerState.Jumping;
         rBody.velocity = new Vector3(initialMovementSpeed, rBody.velocity.y, 0f);
         gravityScale = rBody.gravityScale;
+        currentPlayerHP = playerHP;
         currentMovementSpeed = initialMovementSpeed;
         currentDirection = Mathf.Sign(currentMovementSpeed);
 
         float g = rBody.gravityScale * Physics2D.gravity.magnitude;
         float v0 = maxJumpForce / rBody.mass; // converts the jumpForce to an initial velocity
         maxJumpY = (v0 * v0) / (2 * g) - 0.04f;
-        Debug.Log(maxJumpY);
+        //Debug.Log(maxJumpY);
     }
 	
 	// Update is called once per frame
@@ -71,7 +81,6 @@ public class PlayerController : MonoBehaviour {
         {
             Walk();
         }
-
 
         // Inputs
         if (Input.GetKeyDown(KeyCode.Space))
@@ -108,6 +117,7 @@ public class PlayerController : MonoBehaviour {
                 playerState = PlayerState.Running;
                 RaycastHit2D hitResult = Physics2D.Raycast(transform.position, Vector3.down, raycastLength, groundLayer);// FUNCTION FUNCTION FUNCTION
                 hitResult.transform.GetComponent<BlockController>().DamageBlock(CalculateDamage());
+                CameraShaker.instance.startCameraShake(cameraShakeTime, cameraShakeSpeed, cameraShakeMagnitude);
             }
             else
             {
@@ -188,5 +198,18 @@ public class PlayerController : MonoBehaviour {
         }
 
         return damage;
+    }
+
+    public void DamagePlayer(int damageValue)
+    {
+        currentPlayerHP -= damageValue;
+
+        if (currentPlayerHP <= 0)
+            KillPlayer();
+    }
+
+    void KillPlayer()
+    {
+        Destroy(gameObject);
     }
 }
