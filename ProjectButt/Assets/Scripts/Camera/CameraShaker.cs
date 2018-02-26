@@ -40,7 +40,7 @@ public class CameraShaker : MonoBehaviour {
         if (magnitude >= previousMagnitude)
             StopCoroutine("ShakeCamera");
 
-        originalPosition = cameraTransform.position;
+        originalPosition = cameraTransform.localPosition;
         StartCoroutine(ShakeCamera(duration, speed, magnitude));
     }
 
