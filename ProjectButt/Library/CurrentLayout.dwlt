@@ -500,18 +500,18 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SearchArea: 0
     m_Folders:
-    - Assets/Scripts/Camera
+    - Assets/Materials
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Scripts/Camera
+  - Assets/Materials
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\big_b\Desktop\ProjectButtRepository\ProjectButt
   m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 18280000
-    m_LastClickedID: 10264
+    m_SelectedIDs: 9c290000
+    m_LastClickedID: 10652
     m_ExpandedIDs: 000000008227000090270000c02700000028000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -658,9 +658,9 @@ MonoBehaviour:
   m_PersistentViewDataDictionary: {fileID: 0}
   m_TreeViewState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: e4b7ffff
-    m_LastClickedID: -18460
-    m_ExpandedIDs: e4b7ffff9efbffff000000001e290000
+    m_SelectedIDs: 80280000
+    m_LastClickedID: 10368
+    m_ExpandedIDs: 9efbffff00000000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -716,9 +716,9 @@ MonoBehaviour:
   m_isRotationLocked: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: -1.5690031, y: 0.5251322, z: -0.046727408}
+    m_Target: {x: -1.3996899, y: -0.81811446, z: -0.07617544}
     speed: 2
-    m_Value: {x: -1.5690031, y: 0.5251322, z: -0.046727408}
+    m_Value: {x: -1.3996899, y: -0.81811446, z: -0.07617544}
   m_RenderMode: 0
   m_ValidateTrueMetals: 0
   m_SceneViewState:
@@ -746,9 +746,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 8.3697605
+    m_Target: 11.298108
     speed: 2
-    m_Value: 8.3697605
+    m_Value: 11.298108
   m_Ortho:
     m_Target: 1
     speed: 2
