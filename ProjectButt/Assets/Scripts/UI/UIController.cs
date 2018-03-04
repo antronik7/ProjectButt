@@ -5,6 +5,12 @@ using UnityEngine.UI;
 
 public class UIController : MonoBehaviour {
 
+    enum Transition
+    {
+        LeftToRight,
+        UpToDown,
+    }
+
     public static UIController instance = null;
 
     [SerializeField]
