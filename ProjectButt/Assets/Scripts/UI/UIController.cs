@@ -5,16 +5,20 @@ using UnityEngine.UI;
 
 public class UIController : MonoBehaviour {
 
-    enum Transition
+    public enum Transition
     {
         LeftToRight,
-        UpToDown,
+        RightToLeft,
+        TopToBottom,
+        BottomToTop
     }
 
     public static UIController instance = null;
 
     [SerializeField]
     Text scoreText;
+    [SerializeField]
+    Animator transitionAnimator;
 
     //Awake is always called before any Start functions
     void Awake()
@@ -42,5 +46,26 @@ public class UIController : MonoBehaviour {
     public void setScoreText(int value)
     {
         scoreText.text = value.ToString();
+    }
+
+    public void StartTransition(Transition transitionType)
+    {
+        switch (transitionType)
+        {
+            case Transition.LeftToRight:
+                transitionAnimator.SetTrigger("LeftToRight");
+                break;
+            case Transition.RightToLeft:
+                transitionAnimator.SetTrigger("RightToLeft");
+                break;
+            case Transition.TopToBottom:
+                transitionAnimator.SetTrigger("TopToBottom");
+                break;
+            case Transition.BottomToTop:
+                transitionAnimator.SetTrigger("BottomToTop");
+                break;
+            default:
+                break;
+        }
     }
 }
