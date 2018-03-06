@@ -8,7 +8,7 @@ public class StartScreenController : MonoBehaviour {
     [SerializeField]
     GameObject player;
     [SerializeField]
-    float activateJumpDelay = 1;
+    float activateJumpDelay = 2;
     [SerializeField]
     float changeSceneY = 0;
     [SerializeField]
@@ -30,12 +30,12 @@ public class StartScreenController : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        Invoke("EnablePlayerJump", nextSceneDelay);
+        Invoke("EnablePlayerJump", activateJumpDelay);
     }
 	
 	// Update is called once per frame
 	void Update () {
-        if (playerTransform.position.y < activateJumpDelay)
+        if (playerTransform.position.y < changeSceneY)
         {
             Invoke("ChangeScene", nextSceneDelay);
             UIController.instance.StartTransition(transitionType);
