@@ -8,6 +8,9 @@ public class BlockController : MonoBehaviour {
     int blockHP = 5;
     [SerializeField]
     SpriteRenderer[] blockSprites;
+    [SerializeField]
+    Vector3 positionPool;
+
 
     int blockCurrentHP;
 
@@ -31,9 +34,18 @@ public class BlockController : MonoBehaviour {
             ChangeBlockVisual();
     }
 
+    public void resetBlock()
+    {
+        blockCurrentHP = blockHP;
+        for (int i = 0; i < blockSprites.Length; ++i)
+        {
+            blockSprites[i].color = new Color(1f, 1f, 1f, 1f);
+        }
+    }
+
     void DestroyBlock()
     {
-        Destroy(gameObject);
+        transform.position = positionPool;
     }
 
     void ChangeBlockVisual()
