@@ -8,7 +8,8 @@ public class PlayerController : MonoBehaviour {
     {
         Running,
         Jumping,
-        GroundPounding
+        GroundPounding,
+        Falling
     }
 
     [SerializeField]
@@ -47,6 +48,7 @@ public class PlayerController : MonoBehaviour {
     float currentMovementSpeed;
     float currentDirection;
     int currentPlayerHP;
+    float previousVelocityY = 0;
     float startJumpHeight = 0;
     float startGPHeight = 0;
     float maxJumpY = 0;
@@ -116,7 +118,13 @@ public class PlayerController : MonoBehaviour {
             {
                 playerState = PlayerState.Running;
                 RaycastHit2D hitResult = Physics2D.Raycast(transform.position, Vector3.down, raycastLength, groundLayer);// FUNCTION FUNCTION FUNCTION
-                hitResult.transform.GetComponent<BlockController>().DamageBlock(CalculateDamage());
+                BlockController block = hitResult.transform.GetComponent<BlockController>();
+                block.DamageBlock(CalculateDamage());
+                if(block.getCurrentHp() <= 0)
+                {
+                    playerState = PlayerState.Falling;
+                    rBody.velocity = new Vector3(0f, groundPoundForce * -1, 0f);
+                }
                 CameraShaker.instance.startCameraShake(cameraShakeTime, cameraShakeSpeed, cameraShakeMagnitude);
             }
             else
@@ -131,6 +139,8 @@ public class PlayerController : MonoBehaviour {
             currentMovementSpeed *= -1;
             rBody.velocity = new Vector3(currentMovementSpeed, rBody.velocity.y, 0f);
         }
+
+        previousVelocityY = rBody.velocity.y;
     }
 
     void Walk()

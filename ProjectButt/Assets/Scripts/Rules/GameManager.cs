@@ -41,8 +41,6 @@ public class GameManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         playerY = player.position.y;
-
-        Debug.Log(score);
     }
 
     public void AddScore(int scoerToAdd)

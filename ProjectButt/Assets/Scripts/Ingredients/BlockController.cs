@@ -11,12 +11,12 @@ public class BlockController : MonoBehaviour {
     [SerializeField]
     Vector3 positionPool;
 
-
-    int blockCurrentHP;
+    List<SpikeController> spikes = new List<SpikeController>();
+    int currentBlockHP;
 
     // Use this for initialization
     void Start () {
-        blockCurrentHP = blockHP;
+        currentBlockHP = blockHP;
 	}
 	
 	// Update is called once per frame
@@ -24,11 +24,22 @@ public class BlockController : MonoBehaviour {
 		
 	}
 
+    //probably should do it by reference there...
+    public void addSpike(SpikeController spikeController)
+    {
+        spikes.Add(spikeController);
+    }
+
+    public void PlaceBlock(float x, float y)
+    {
+        transform.position = new Vector3(x, y, transform.position.z);
+    }
+
     public void DamageBlock(int damageValue)
     {
-        blockCurrentHP -= damageValue;
+        currentBlockHP -= damageValue;
 
-        if (blockCurrentHP <= 0)
+        if (currentBlockHP <= 0)
             DestroyBlock();
         else
             ChangeBlockVisual();
@@ -36,15 +47,21 @@ public class BlockController : MonoBehaviour {
 
     public void resetBlock()
     {
-        blockCurrentHP = blockHP;
+        currentBlockHP = blockHP;
         for (int i = 0; i < blockSprites.Length; ++i)
         {
             blockSprites[i].color = new Color(1f, 1f, 1f, 1f);
         }
     }
 
+    public int getCurrentHp()
+    {
+        return currentBlockHP;
+    }
+
     void DestroyBlock()
     {
+        spikes.Clear();
         transform.position = positionPool;
     }
 
@@ -52,7 +69,11 @@ public class BlockController : MonoBehaviour {
     {
         for (int i = 0; i < blockSprites.Length; ++i)
         {
-            blockSprites[i].color = new Color(1f, 1f, 1f, (float)blockCurrentHP / (float)blockHP);
+            float alpha = (float)currentBlockHP / (float)blockHP;
+            blockSprites[i].color = new Color(1f, 1f, 1f, alpha);
+
+            if (i < spikes.Count)
+                spikes[i].ChangeBlockVisual(alpha);
         }
     }
 }
