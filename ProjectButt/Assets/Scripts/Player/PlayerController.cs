@@ -9,7 +9,8 @@ public class PlayerController : MonoBehaviour {
         Running,
         Jumping,
         GroundPounding,
-        Falling
+        Falling,
+        Grounded
     }
 
     [SerializeField]
@@ -123,7 +124,7 @@ public class PlayerController : MonoBehaviour {
                 if(block.getCurrentHp() <= 0)
                 {
                     playerState = PlayerState.Falling;
-                    rBody.velocity = new Vector3(0f, groundPoundForce * -1, 0f);
+                    rBody.velocity = new Vector3(0f, previousVelocityY, 0f);
                 }
                 CameraShaker.instance.startCameraShake(cameraShakeTime, cameraShakeSpeed, cameraShakeMagnitude);
             }
