@@ -10,7 +10,8 @@ public class PlayerController : MonoBehaviour {
         Jumping,
         GroundPounding,
         Falling,
-        Grounded
+        Grounded,
+        CrashingTroughBlocks
     }
 
     [SerializeField]
@@ -45,6 +46,16 @@ public class PlayerController : MonoBehaviour {
     LayerMask wallLayer;
     [SerializeField]
     float raycastLength = 0.6f;
+    [SerializeField]
+    float GroundedRecoverForce = 1.5f;
+    [SerializeField]
+    float deathDelay = 1.0f;
+    [SerializeField]
+    float deadCameraShakeTime = 1f;
+    [SerializeField]
+    float deadCameraShakeSpeed = 1f;
+    [SerializeField]
+    float deadCameraShakeMagnitude = 2f;
 
     float currentMovementSpeed;
     float currentDirection;
@@ -54,14 +65,17 @@ public class PlayerController : MonoBehaviour {
     float startGPHeight = 0;
     float maxJumpY = 0;
     PlayerState playerState;
+    bool disableGameplay = false;
 
     Rigidbody2D rBody;
+    Collider2D collider;
     float gravityScale;
     Animator animator;
 
 	// Use this for initialization
 	void Start () {
         rBody = GetComponent<Rigidbody2D>();
+        collider = GetComponent<Collider2D>();
         animator = GetComponent<Animator>();
 
         playerState = PlayerState.Jumping;
@@ -79,6 +93,10 @@ public class PlayerController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+        if (disableGameplay)
+            return;
+
         // States
         if (playerState == PlayerState.Running)
         {
@@ -107,38 +125,52 @@ public class PlayerController : MonoBehaviour {
             }
         }
 
+        if (!Input.GetKey(KeyCode.Space))
+        {
+            if(playerState == PlayerState.Grounded)
+            {
+                rBody.velocity = new Vector3(0f, GroundedRecoverForce, 0f);
+                playerState = PlayerState.Falling;
+                animator.SetTrigger("StopGrounded");
+            }
+        }
+
         //Debug.DrawRay(transform.position, Vector3.right * raycastLength, Color.red);
         //Debug.Log(playerState);
     }
 
     private void FixedUpdate()
     {
+        if (disableGameplay)
+            return;
+
         if (GroundCheck())
         {
             if (playerState == PlayerState.GroundPounding)
             {
                 playerState = PlayerState.Running;
-                RaycastHit2D hitResult = Physics2D.Raycast(transform.position, Vector3.down, raycastLength, groundLayer);// FUNCTION FUNCTION FUNCTION
-                BlockController block = hitResult.transform.GetComponent<BlockController>();
-                block.DamageBlock(CalculateDamage());
-                if(block.getCurrentHp() <= 0)
-                {
-                    playerState = PlayerState.Falling;
-                    rBody.velocity = new Vector3(0f, previousVelocityY, 0f);
-                }
-                CameraShaker.instance.startCameraShake(cameraShakeTime, cameraShakeSpeed, cameraShakeMagnitude);
+
+                DamageBlocks();
             }
-            else
+            else if (playerState != PlayerState.Grounded && playerState != PlayerState.CrashingTroughBlocks)
             {
                 playerState = PlayerState.Running;
             }
+            else if(playerState == PlayerState.CrashingTroughBlocks)
+            {
+                playerState = PlayerState.Grounded; // FUNCTION FUNCTION FUNCTION
+                animator.SetTrigger("Grounded");
+            }
+        }
+        else
+        {
+            if (playerState == PlayerState.Running)
+                playerState = PlayerState.Falling;
         }
 
         if (WallCheck())
         {
-            currentDirection *= -1;
-            currentMovementSpeed *= -1;
-            rBody.velocity = new Vector3(currentMovementSpeed, rBody.velocity.y, 0f);
+            InverseDirection();
         }
 
         previousVelocityY = rBody.velocity.y;
@@ -173,9 +205,26 @@ public class PlayerController : MonoBehaviour {
 
     bool GroundCheck()
     {
-        if (rBody.velocity.y <= 0 && Physics2D.Raycast(transform.position, Vector3.down, raycastLength, groundLayer))
+        if (rBody.velocity.y <= 0)
         {
-            return true;
+            if(Physics2D.Raycast(transform.position, Vector3.down, raycastLength, groundLayer))// LOOP LOOP LOOP
+            {
+                return true;
+            }
+
+            Vector3 positionRay = new Vector3(transform.position.x - 0.26f, transform.position.y, transform.position.z);
+
+            if (Physics2D.Raycast(positionRay, Vector3.down, raycastLength, groundLayer))
+            {
+                return true;
+            }
+
+            positionRay = new Vector3(transform.position.x + 0.26f, transform.position.y, transform.position.z);
+
+            if (Physics2D.Raycast(positionRay, Vector3.down, raycastLength, groundLayer))
+            {
+                return true;
+            }
         }
 
         return false;
@@ -189,6 +238,44 @@ public class PlayerController : MonoBehaviour {
         }
 
         return false;
+    }
+
+    void DamageBlocks()
+    {
+        int nbrBlocksDestroyed = 0;
+
+        RaycastHit2D[] blocks = Physics2D.BoxCastAll(new Vector2(transform.position.x, transform.position.y - raycastLength), new Vector2(0.55f, 0.1f), 0, Vector2.zero, 0, groundLayer);// VARIABLE VARIABLE VARIABLE
+        int nbrBlocksHit = blocks.Length;
+        for (int i = 0; i < nbrBlocksHit; ++i)
+        {
+            BlockController block = blocks[i].transform.GetComponent<BlockController>();
+            block.DamageBlock(CalculateDamage());
+            if (block.getCurrentHp() <= 0)
+            {
+                ++nbrBlocksDestroyed;
+            }
+        }
+
+        if (nbrBlocksDestroyed == nbrBlocksHit)
+        {
+            playerState = PlayerState.CrashingTroughBlocks;
+            rBody.velocity = new Vector3(0f, previousVelocityY, 0f);
+        }
+        else
+        {
+            playerState = PlayerState.Grounded;// FUNCTION FUNCTION FUNCTION
+            animator.SetTrigger("Grounded");
+        }
+
+        if (nbrBlocksHit > 0)
+            CameraShaker.instance.startCameraShake(cameraShakeTime, cameraShakeSpeed, cameraShakeMagnitude);
+    }
+
+    void InverseDirection()
+    {
+        currentDirection *= -1;
+        currentMovementSpeed *= -1;
+        rBody.velocity = new Vector3(currentMovementSpeed, rBody.velocity.y, 0f);// MAYBE NOT NECESSARY
     }
 
     int CalculateDamage()
@@ -221,6 +308,23 @@ public class PlayerController : MonoBehaviour {
 
     void KillPlayer()
     {
-        Destroy(gameObject);
+        DisablePlayerGameplay();
+        rBody.velocity = Vector3.zero;
+        rBody.gravityScale = 0;
+        collider.enabled = false;
+        CameraShaker.instance.startCameraShake(deadCameraShakeTime, deadCameraShakeSpeed, deadCameraShakeMagnitude);
+        Invoke("PlayerDeath", deathDelay);
+    }
+
+    void PlayerDeath()
+    {
+        rBody.gravityScale = 1;
+        rBody.velocity = new Vector3(0f, 6f, 0f); // VARIABLE VARIABLE VARIABLE
+        animator.SetTrigger("Dead");
+    }
+
+    public void DisablePlayerGameplay()
+    {
+        disableGameplay = true;
     }
 }

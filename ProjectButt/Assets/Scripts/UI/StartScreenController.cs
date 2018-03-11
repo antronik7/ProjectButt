@@ -17,9 +17,12 @@ public class StartScreenController : MonoBehaviour {
     float nextSceneDelay = 1;
     [SerializeField]
     UIController.Transition transitionType;
+    [SerializeField]
+    ChangeScene wtf;
 
     Transform playerTransform;
     PlayerController playerScript;
+    bool alreadyChangingScene = false;
 
     //Awake is always called before any Start functions
     void Awake()
@@ -35,8 +38,9 @@ public class StartScreenController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (playerTransform.position.y < changeSceneY)
+        if (playerTransform.position.y < changeSceneY && !alreadyChangingScene)
         {
+            alreadyChangingScene = true;
             Invoke("ChangeScene", nextSceneDelay);
             UIController.instance.StartTransition(transitionType);
         }

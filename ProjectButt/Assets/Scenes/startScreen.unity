@@ -1446,6 +1446,7 @@ MonoBehaviour:
   blockHP: 2
   blockSprites:
   - {fileID: 1872489177}
+  positionPool: {x: -100, y: -100, z: 0}
 --- !u!61 &1872489180
 BoxCollider2D:
   m_ObjectHideFlags: 0

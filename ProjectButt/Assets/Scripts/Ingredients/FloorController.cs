@@ -11,9 +11,9 @@ public class FloorController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (GameManager.instance.playerY < transform.position.y)
+        if (MyGameManager.instance.playerY < transform.position.y)
         {
-            GameManager.instance.AddScore(1);
+            MyGameManager.instance.AddScore(1);
             this.enabled = false;
         }
             
