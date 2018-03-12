@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class FloorController : MonoBehaviour {
 
+    [SerializeField]
+    Vector3 positionPool;
+
+    bool watchPlayer = false;
+
 	// Use this for initialization
 	void Start () {
 		
@@ -11,11 +16,29 @@ public class FloorController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (MyGameManager.instance.playerY < transform.position.y)
+        if (!watchPlayer)
+            return;
+
+        if (GameManager.instance.playerY < transform.position.y)
         {
-            MyGameManager.instance.AddScore(1);
-            this.enabled = false;
+            GameManager.instance.AddFloor();
+            watchPlayer = false;
         }
-            
 	}
+
+    public void Reset()
+    {
+        watchPlayer = true;
+    }
+
+    public void DestroyFloorController()
+    {
+        watchPlayer = false;
+        transform.position = positionPool;
+    }
+
+    public void PlaceFloor(float y)
+    {
+        transform.position = new Vector3(0, y, transform.position.z);
+    }
 }

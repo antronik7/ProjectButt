@@ -27,12 +27,12 @@ public class SpikeController : MonoBehaviour {
         other.GetComponent<PlayerController>().DamagePlayer(damage);
     }
 
-    void DestroySpike()
+    public void DestroySpike()
     {
         transform.position = positionPool;
     }
 
-    public void resetSpike()
+    public void ResetSpike()
     {
         spikeSprite.color = new Color(1f, 1f, 1f, 1f);
     }
@@ -40,5 +40,10 @@ public class SpikeController : MonoBehaviour {
     public void ChangeBlockVisual(float alpha)
     {
         spikeSprite.color = new Color(1f, 1f, 1f, alpha);
+    }
+
+    public void PlaceSpike(float x, float y)
+    {
+        transform.position = new Vector3(x, y, transform.position.z);
     }
 }

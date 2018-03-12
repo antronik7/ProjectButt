@@ -68,17 +68,17 @@ public class PlayerController : MonoBehaviour {
     bool disableGameplay = false;
 
     Rigidbody2D rBody;
-    Collider2D collider;
+    Collider2D myCollider;
     float gravityScale;
     Animator animator;
 
 	// Use this for initialization
 	void Start () {
         rBody = GetComponent<Rigidbody2D>();
-        collider = GetComponent<Collider2D>();
+        myCollider = GetComponent<Collider2D>();
         animator = GetComponent<Animator>();
 
-        playerState = PlayerState.Jumping;
+        playerState = PlayerState.CrashingTroughBlocks;
         rBody.velocity = new Vector3(initialMovementSpeed, rBody.velocity.y, 0f);
         gravityScale = rBody.gravityScale;
         currentPlayerHP = playerHP;
@@ -250,7 +250,7 @@ public class PlayerController : MonoBehaviour {
         {
             BlockController block = blocks[i].transform.GetComponent<BlockController>();
             block.DamageBlock(CalculateDamage());
-            if (block.getCurrentHp() <= 0)
+            if (block.GetCurrentHp() <= 0)
             {
                 ++nbrBlocksDestroyed;
             }
@@ -311,7 +311,7 @@ public class PlayerController : MonoBehaviour {
         DisablePlayerGameplay();
         rBody.velocity = Vector3.zero;
         rBody.gravityScale = 0;
-        collider.enabled = false;
+        myCollider.enabled = false;
         CameraShaker.instance.startCameraShake(deadCameraShakeTime, deadCameraShakeSpeed, deadCameraShakeMagnitude);
         Invoke("PlayerDeath", deathDelay);
     }
@@ -321,6 +321,11 @@ public class PlayerController : MonoBehaviour {
         rBody.gravityScale = 1;
         rBody.velocity = new Vector3(0f, 6f, 0f); // VARIABLE VARIABLE VARIABLE
         animator.SetTrigger("Dead");
+    }
+
+    public void EnablePlayerGameplay()
+    {
+        disableGameplay = false;
     }
 
     public void DisablePlayerGameplay()

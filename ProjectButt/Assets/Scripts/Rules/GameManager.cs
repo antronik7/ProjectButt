@@ -7,14 +7,23 @@ public class GameManager : MonoBehaviour {
 
     public static GameManager instance = null;
 
-    [HideInInspector]
-    public int score = 0;
-
-    [HideInInspector]
-    public float playerY = 0;
-
     [SerializeField]
     Transform player;
+    [SerializeField]
+    WallOfDeathController wallOfDeath;
+    [SerializeField]
+    CameraController myCamera;
+    [SerializeField]
+    RandomFloorGenerator floorGenerator;
+    [SerializeField]
+    float wallOfDeathSpeedModificator = 0.1f;
+
+    [HideInInspector]
+    public int score = 0;
+    [HideInInspector]
+    public int floor = 1;
+    [HideInInspector]
+    public float playerY = 0;
 
     //Awake is always called before any Start functions
     void Awake()
@@ -27,9 +36,6 @@ public class GameManager : MonoBehaviour {
         else if (instance != this)
             //Then destroy this. This enforces our singleton pattern, meaning there can only ever be one instance of a GameManager.
             Destroy(gameObject);
-
-        //Sets this to not be destroyed when reloading scene
-        DontDestroyOnLoad(gameObject);
 
         playerY = player.position.y;
     }
@@ -51,5 +57,20 @@ public class GameManager : MonoBehaviour {
             score += scoerToAdd;
             UIController.instance.setScoreText(score);
         }
+    }
+
+    public void AddFloor()
+    {
+        ++floor;
+        if (floor % 10 == 0)
+            wallOfDeath.ModifySpeed(wallOfDeathSpeedModificator);
+
+        floorGenerator.GenerateOneFloor();
+    }
+
+    public void PlayerGotKill()
+    {
+        wallOfDeath.SetWallCanMove(false);
+        myCamera.SetFollowPlayer(false);
     }
 }
