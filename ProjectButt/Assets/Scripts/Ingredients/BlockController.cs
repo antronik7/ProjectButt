@@ -12,7 +12,7 @@ public class BlockController : MonoBehaviour {
     SpriteRenderer[] blockSprites;
     [SerializeField]
     Vector3 positionPool;
-
+    [SerializeField]
     List<SpikeController> spikes = new List<SpikeController>();
     int currentBlockHP;
 
@@ -50,6 +50,8 @@ public class BlockController : MonoBehaviour {
     public void ResetBlock()
     {
         currentBlockHP = blockHP;
+        ChangeBlockVisual();
+        spikes.Clear();
         for (int i = 0; i < blockSprites.Length; ++i)
         {
             blockSprites[i].color = new Color(1f, 1f, 1f, 1f);
@@ -63,14 +65,13 @@ public class BlockController : MonoBehaviour {
 
     void DestroyBlock()
     {
-        GameManager.instance.AddScore(blockScore);
+        if(blockScore > 0)
+            GameManager.instance.AddScore(blockScore);
 
         for (int i = 0; i < spikes.Count; ++i)
         {
             spikes[i].DestroySpike();
         }
-
-        spikes.Clear();
 
         transform.position = positionPool;
     }

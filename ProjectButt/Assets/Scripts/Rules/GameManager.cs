@@ -17,6 +17,9 @@ public class GameManager : MonoBehaviour {
     RandomFloorGenerator floorGenerator;
     [SerializeField]
     float wallOfDeathSpeedModificator = 0.1f;
+    [SerializeField]
+    UIController.Transition transitionStartLevel;
+  
 
     [HideInInspector]
     public int score = 0;
@@ -24,6 +27,8 @@ public class GameManager : MonoBehaviour {
     public int floor = 1;
     [HideInInspector]
     public float playerY = 0;
+
+    PlayerController playerController;
 
     //Awake is always called before any Start functions
     void Awake()
@@ -37,7 +42,10 @@ public class GameManager : MonoBehaviour {
             //Then destroy this. This enforces our singleton pattern, meaning there can only ever be one instance of a GameManager.
             Destroy(gameObject);
 
+        playerController = player.GetComponent<PlayerController>();
         playerY = player.position.y;
+
+        UIController.instance.StartTransition(transitionStartLevel);
     }
 
     // Use this for initialization
@@ -48,6 +56,13 @@ public class GameManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         playerY = player.position.y;
+    }
+
+    void RoundStartAnimation()
+    {
+        UIController.instance.StartTransition(transitionStartLevel);
+        playerController.DisablePlayerRunning();
+        playerController.DisablePlayerJumping();
     }
 
     public void AddScore(int scoerToAdd)

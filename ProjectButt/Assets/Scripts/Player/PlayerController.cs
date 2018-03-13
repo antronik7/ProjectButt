@@ -66,6 +66,8 @@ public class PlayerController : MonoBehaviour {
     float maxJumpY = 0;
     PlayerState playerState;
     bool disableGameplay = false;
+    bool enableRunning = true;
+    bool enableJumping = true;
 
     Rigidbody2D rBody;
     Collider2D myCollider;
@@ -79,15 +81,14 @@ public class PlayerController : MonoBehaviour {
         animator = GetComponent<Animator>();
 
         playerState = PlayerState.CrashingTroughBlocks;
-        rBody.velocity = new Vector3(initialMovementSpeed, rBody.velocity.y, 0f);
         gravityScale = rBody.gravityScale;
         currentPlayerHP = playerHP;
         currentMovementSpeed = initialMovementSpeed;
         currentDirection = Mathf.Sign(currentMovementSpeed);
 
-        float g = rBody.gravityScale * Physics2D.gravity.magnitude;
-        float v0 = maxJumpForce / rBody.mass; // converts the jumpForce to an initial velocity
-        maxJumpY = (v0 * v0) / (2 * g) - 0.04f;
+        //float g = rBody.gravityScale * Physics2D.gravity.magnitude;
+        //float v0 = maxJumpForce / rBody.mass; // converts the jumpForce to an initial velocity
+        //maxJumpY = (v0 * v0) / (2 * g) - 0.04f;
         //Debug.Log(maxJumpY);
     }
 	
@@ -98,8 +99,9 @@ public class PlayerController : MonoBehaviour {
             return;
 
         // States
-        if (playerState == PlayerState.Running)
+        if (enableRunning && playerState == PlayerState.Running)
         {
+            Debug.Log("nononon");
             Walk();
         }
 
@@ -308,6 +310,7 @@ public class PlayerController : MonoBehaviour {
 
     void KillPlayer()
     {
+        GameManager.instance.PlayerGotKill();
         DisablePlayerGameplay();
         rBody.velocity = Vector3.zero;
         rBody.gravityScale = 0;
@@ -331,5 +334,26 @@ public class PlayerController : MonoBehaviour {
     public void DisablePlayerGameplay()
     {
         disableGameplay = true;
+    }
+
+    public void EnablePlayerRunning()
+    {
+        enableRunning = true;
+    }
+
+    public void DisablePlayerRunning()
+    {
+        enableRunning = false;
+        rBody.velocity = Vector3.zero;
+    }
+
+    public void EnablePlayerJumping()
+    {
+        enableJumping = true;
+    }
+
+    public void DisablePlayerJumping()
+    {
+        enableJumping = false;
     }
 }

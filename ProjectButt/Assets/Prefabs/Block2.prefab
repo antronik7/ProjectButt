@@ -138,10 +138,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockHP: 3
+  blockScore: 2
   blockSprites:
   - {fileID: 212219971428093220}
   - {fileID: 212360493843550830}
   positionPool: {x: -100, y: 0, z: 0}
+  spikes: []
 --- !u!212 &212219971428093220
 SpriteRenderer:
   m_ObjectHideFlags: 1

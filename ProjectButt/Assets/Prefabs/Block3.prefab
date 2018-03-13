@@ -168,11 +168,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockHP: 3
+  blockScore: 3
   blockSprites:
   - {fileID: 212580445082416936}
   - {fileID: 212134439074798214}
   - {fileID: 212989651524362382}
   positionPool: {x: -100, y: 0, z: 0}
+  spikes: []
 --- !u!212 &212134439074798214
 SpriteRenderer:
   m_ObjectHideFlags: 1

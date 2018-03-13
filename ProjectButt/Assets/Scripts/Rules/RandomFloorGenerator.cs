@@ -7,7 +7,7 @@ public class RandomFloorGenerator : MonoBehaviour {
     [SerializeField]
     int numberBlocks = 11;
     [SerializeField]
-    float firstFloorY = 0;
+    float firstFloorY = -2.5f;
     [SerializeField]
     float floorsDistance = 2.5f;
     [SerializeField]
@@ -31,7 +31,7 @@ public class RandomFloorGenerator : MonoBehaviour {
     [SerializeField]
     int spikePercentage = 25;
     [SerializeField]
-    int maximumSpikesPerFloor = 3;
+    int maximumSpikesPerFloor = 2;
     [SerializeField]
     FloorController[] floorControllers;
 
@@ -53,6 +53,7 @@ public class RandomFloorGenerator : MonoBehaviour {
         GenerateOneFloor();
         GenerateOneFloor();
         GenerateOneFloor();
+        GenerateOneFloor();
     }
 
     // Update is called once per frame
@@ -64,7 +65,9 @@ public class RandomFloorGenerator : MonoBehaviour {
     public void GenerateOneFloor()
     {
         int blocksLeft = numberBlocks;
+        int nbrSpikes = 0;
 
+        floorControllers[currentIndexFloorController].ResetFloor();
         floorControllers[currentIndexFloorController].PlaceFloor(currentFloorY);
 
         while(blocksLeft > 0)
@@ -84,15 +87,16 @@ public class RandomFloorGenerator : MonoBehaviour {
                 blocks1[currentIndexBlock1].ResetBlock();
                 blocks1[currentIndexBlock1].PlaceBlock(blockX, currentFloorY);
 
-                if (Random.Range(1, 101) <= spikePercentage)
+                if (nbrSpikes < maximumSpikesPerFloor && Random.Range(1, 101) <= spikePercentage)
                 {
+                    ++nbrSpikes;
                     spikes[currentIndexSpikes].ResetSpike();
                     spikes[currentIndexSpikes].PlaceSpike(blockX, currentFloorY);
                     blocks1[currentIndexBlock1].AddSpike(spikes[currentIndexSpikes]);
 
                     ++currentIndexSpikes;
                     if (currentIndexSpikes >= spikes.Length)
-                        currentIndexBlock1 = 0;
+                        currentIndexSpikes = 0;
                 }
 
                 currentIndexBlock1++;
@@ -100,19 +104,21 @@ public class RandomFloorGenerator : MonoBehaviour {
             }
             else if (randomRatio > ratioBlock1 && randomRatio <= ratioBlock1 + ratioBlock2)
             {
+                blocks2[currentIndexBlock2].ResetBlock();
                 blocks2[currentIndexBlock2].PlaceBlock(blockX + 0.25f, currentFloorY);
 
                 for (int i = 0; i < 2; i++)
                 {
-                    if (Random.Range(1, 101) <= spikePercentage)
+                    if (nbrSpikes < maximumSpikesPerFloor && Random.Range(1, 101) <= spikePercentage)
                     {
+                        ++nbrSpikes;
                         spikes[currentIndexSpikes].ResetSpike();
-                        spikes[currentIndexSpikes].PlaceSpike(blockX, currentFloorY);
-                        blocks1[currentIndexBlock1].AddSpike(spikes[currentIndexSpikes]);
+                        spikes[currentIndexSpikes].PlaceSpike(blockX + (i * blockDistance), currentFloorY);
+                        blocks2[currentIndexBlock2].AddSpike(spikes[currentIndexSpikes]);
 
                         ++currentIndexSpikes;
                         if (currentIndexSpikes >= spikes.Length)
-                            currentIndexBlock1 = 0;
+                            currentIndexSpikes = 0;
                     }
                 }
 
@@ -121,7 +127,24 @@ public class RandomFloorGenerator : MonoBehaviour {
             }
             else if (randomRatio > ratioBlock1 + ratioBlock2 && randomRatio <= ratioBlock1 + ratioBlock2 + ratioBlock3)
             {
+                blocks3[currentIndexBlock3].ResetBlock();
                 blocks3[currentIndexBlock3].PlaceBlock(blockX + 0.5f, currentFloorY);
+
+                for (int i = 0; i < 3; i++)
+                {
+                    if (nbrSpikes < maximumSpikesPerFloor && Random.Range(1, 101) <= spikePercentage)
+                    {
+                        ++nbrSpikes;
+                        spikes[currentIndexSpikes].ResetSpike();
+                        spikes[currentIndexSpikes].PlaceSpike(blockX + (i * blockDistance), currentFloorY);
+                        blocks3[currentIndexBlock3].AddSpike(spikes[currentIndexSpikes]);
+
+                        ++currentIndexSpikes;
+                        if (currentIndexSpikes >= spikes.Length)
+                            currentIndexSpikes = 0;
+                    }
+                }
+
                 currentIndexBlock3++;
                 blocksLeft -= 3;
             }
@@ -129,21 +152,21 @@ public class RandomFloorGenerator : MonoBehaviour {
             {
                 blocksLeft = 0;
             }
+
+            if (currentIndexBlock1 >= blocks1.Length)
+                currentIndexBlock1 = 0;
+
+            if (currentIndexBlock2 >= blocks2.Length)
+                currentIndexBlock2 = 0;
+
+            if (currentIndexBlock3 >= blocks3.Length)
+                currentIndexBlock3 = 0;
         }
 
         ++currentIndexFloorController;
         currentFloorY -= floorsDistance;
 
-        if (currentIndexBlock1 >= blocks1.Length)
-            currentIndexBlock1 = 0;
-
-        if (currentIndexBlock1 >= blocks2.Length)
-            currentIndexBlock2 = 0;
-
-        if (currentIndexBlock1 >= blocks3.Length)
-            currentIndexBlock1 = 0;
-
         if (currentIndexFloorController >= floorControllers.Length)
-            currentIndexBlock1 = 0;
+            currentIndexFloorController = 0;
     }
 }

@@ -32,7 +32,7 @@ public class CameraController : MonoBehaviour {
 
         if(!followIfPlayerHigher)
         {
-            if (GameManager.instance.playerY >= transform.position.y)
+            if (GameManager.instance.playerY + cameraOffset >= transform.position.y)
                 return;
         }
 

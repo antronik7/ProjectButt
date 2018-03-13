@@ -26,7 +26,7 @@ public class FloorController : MonoBehaviour {
         }
 	}
 
-    public void Reset()
+    public void ResetFloor()
     {
         watchPlayer = true;
     }

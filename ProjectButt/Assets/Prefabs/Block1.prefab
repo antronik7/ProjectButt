@@ -19,8 +19,8 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4805848502403220}
-  - component: {fileID: 114340843589282144}
   - component: {fileID: 61691876124352702}
+  - component: {fileID: 114340843589282144}
   m_Layer: 8
   m_Name: Block1
   m_TagString: Untagged
@@ -108,9 +108,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockHP: 3
+  blockScore: 1
   blockSprites:
   - {fileID: 212825665943980152}
   positionPool: {x: -100, y: 0, z: 0}
+  spikes: []
 --- !u!212 &212825665943980152
 SpriteRenderer:
   m_ObjectHideFlags: 1

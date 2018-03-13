@@ -8,8 +8,6 @@ public class StartScreenController : MonoBehaviour {
     [SerializeField]
     GameObject player;
     [SerializeField]
-    float activateJumpDelay = 2;
-    [SerializeField]
     float changeSceneY = 0;
     [SerializeField]
     string nextScene;
@@ -17,8 +15,6 @@ public class StartScreenController : MonoBehaviour {
     float nextSceneDelay = 1;
     [SerializeField]
     UIController.Transition transitionType;
-    [SerializeField]
-    ChangeScene wtf;
 
     Transform playerTransform;
     PlayerController playerScript;
@@ -33,7 +29,7 @@ public class StartScreenController : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        Invoke("EnablePlayerJump", activateJumpDelay);
+
     }
 	
 	// Update is called once per frame
