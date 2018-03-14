@@ -12,6 +12,7 @@ public class BackgroundScroller : MonoBehaviour {
     Transform[] arrayBackgrounds;
 
     int index = 0;
+    bool scrollBackground = true;
 
 	// Use this for initialization
 	void Start () {
@@ -20,6 +21,10 @@ public class BackgroundScroller : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+        if (!scrollBackground)
+            return;
+
         if (player.position.y < arrayBackgrounds[index].position.y - playerOffset)
         {
             arrayBackgrounds[index].position = new Vector3(0f, arrayBackgrounds[index].position.y - (playerOffset * 3), 0f);
@@ -29,4 +34,14 @@ public class BackgroundScroller : MonoBehaviour {
                 index = 0;
         }
 	}
+
+    public void DisableScrolling()
+    {
+        scrollBackground = false;
+    }
+
+    public void EnableScrolling()
+    {
+        scrollBackground = true;
+    }
 }

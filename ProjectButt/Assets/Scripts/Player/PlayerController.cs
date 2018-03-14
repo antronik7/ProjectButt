@@ -86,9 +86,9 @@ public class PlayerController : MonoBehaviour {
         currentMovementSpeed = initialMovementSpeed;
         currentDirection = Mathf.Sign(currentMovementSpeed);
 
-        //float g = rBody.gravityScale * Physics2D.gravity.magnitude;
-        //float v0 = maxJumpForce / rBody.mass; // converts the jumpForce to an initial velocity
-        //maxJumpY = (v0 * v0) / (2 * g) - 0.04f;
+        float g = rBody.gravityScale * Physics2D.gravity.magnitude;
+        float v0 = maxJumpForce / rBody.mass; // converts the jumpForce to an initial velocity
+        maxJumpY = (v0 * v0) / (2 * g) - 0.04f;
         //Debug.Log(maxJumpY);
     }
 	
@@ -101,12 +101,11 @@ public class PlayerController : MonoBehaviour {
         // States
         if (enableRunning && playerState == PlayerState.Running)
         {
-            Debug.Log("nononon");
             Walk();
         }
 
         // Inputs
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (enableJumping && (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)))
         {
             if(playerState == PlayerState.Running)
             {
@@ -119,7 +118,7 @@ public class PlayerController : MonoBehaviour {
             }
         }
 
-        if(allowHoldJump && Input.GetKeyUp(KeyCode.Space))
+        if(allowHoldJump && (Input.GetKeyUp(KeyCode.Space) || Input.GetMouseButtonUp(0)))
         {
             if(playerState != PlayerState.GroundPounding && rBody.velocity.y > minJumpForce)
             {
@@ -127,7 +126,7 @@ public class PlayerController : MonoBehaviour {
             }
         }
 
-        if (!Input.GetKey(KeyCode.Space))
+        if (!Input.GetKey(KeyCode.Space) && !Input.GetMouseButton(0))
         {
             if(playerState == PlayerState.Grounded)
             {

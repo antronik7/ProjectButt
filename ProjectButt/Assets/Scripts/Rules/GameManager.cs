@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour {
     public float playerY = 0;
 
     PlayerController playerController;
+    BackgroundScroller backgroundScroller;
 
     //Awake is always called before any Start functions
     void Awake()
@@ -42,27 +43,37 @@ public class GameManager : MonoBehaviour {
             //Then destroy this. This enforces our singleton pattern, meaning there can only ever be one instance of a GameManager.
             Destroy(gameObject);
 
+        Application.targetFrameRate = 60;
         playerController = player.GetComponent<PlayerController>();
+        backgroundScroller = GetComponent<BackgroundScroller>();
         playerY = player.position.y;
-
-        UIController.instance.StartTransition(transitionStartLevel);
     }
 
     // Use this for initialization
     void Start () {
-		
-	}
+        StartCoroutine("RoundStartAnimation");
+    }
 	
 	// Update is called once per frame
 	void Update () {
         playerY = player.position.y;
     }
 
-    void RoundStartAnimation()
+    IEnumerator RoundStartAnimation()
     {
         UIController.instance.StartTransition(transitionStartLevel);
         playerController.DisablePlayerRunning();
         playerController.DisablePlayerJumping();
+        wallOfDeath.SetWallCanMove(true);
+        yield return new WaitForSeconds(1.5f);
+        CameraShaker.instance.startCameraShake(1.5f, 15f, 0.25f);
+        yield return new WaitForSeconds(1.5f);
+        wallOfDeath.SetWallCanMove(false);
+        yield return new WaitForSeconds(1f);
+        wallOfDeath.SetWallCanMove(true);
+        playerController.EnablePlayerRunning();
+        playerController.EnablePlayerJumping();
+
     }
 
     public void AddScore(int scoerToAdd)
@@ -87,5 +98,15 @@ public class GameManager : MonoBehaviour {
     {
         wallOfDeath.SetWallCanMove(false);
         myCamera.SetFollowPlayer(false);
+        backgroundScroller.DisableScrolling();
+        StartCoroutine("RestartLevel");
+    }
+
+    IEnumerator RestartLevel()
+    {
+        yield return new WaitForSeconds(3f);
+        UIController.instance.StartTransition(UIController.Transition.LeftToRight);
+        yield return new WaitForSeconds(2f);
+        SceneManager.LoadScene("main");
     }
 }

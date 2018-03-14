@@ -7657,6 +7657,7 @@ MonoBehaviour:
   myCamera: {fileID: 1769933041}
   floorGenerator: {fileID: 1048589587}
   wallOfDeathSpeedModificator: 0.1
+  transitionStartLevel: 1
   score: 0
   floor: 1
   playerY: 0
@@ -9543,7 +9544,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4490342078664646, guid: 28fba8864523a374fa4881d765b9b954, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 14
+      value: 14.5
       objectReference: {fileID: 0}
     - target: {fileID: 4490342078664646, guid: 28fba8864523a374fa4881d765b9b954, type: 2}
       propertyPath: m_LocalPosition.z
@@ -9568,6 +9569,11 @@ Prefab:
     - target: {fileID: 4490342078664646, guid: 28fba8864523a374fa4881d765b9b954, type: 2}
       propertyPath: m_RootOrder
       value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 114028153015435748, guid: 28fba8864523a374fa4881d765b9b954,
+        type: 2}
+      propertyPath: speed
+      value: 0.75
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 28fba8864523a374fa4881d765b9b954, type: 2}
