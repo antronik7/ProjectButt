@@ -31,6 +31,8 @@ public class GameManager : MonoBehaviour {
     PlayerController playerController;
     BackgroundScroller backgroundScroller;
 
+    bool stopGeneratingFloor = false;
+
     //Awake is always called before any Start functions
     void Awake()
     {
@@ -91,6 +93,9 @@ public class GameManager : MonoBehaviour {
         if (floor % 10 == 0)
             wallOfDeath.ModifySpeed(wallOfDeathSpeedModificator);
 
+        if (stopGeneratingFloor)
+            return;
+
         floorGenerator.GenerateOneFloor();
     }
 
@@ -99,6 +104,7 @@ public class GameManager : MonoBehaviour {
         wallOfDeath.SetWallCanMove(false);
         myCamera.SetFollowPlayer(false);
         backgroundScroller.DisableScrolling();
+        stopGeneratingFloor = true;
         StartCoroutine("RestartLevel");
     }
 

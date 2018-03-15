@@ -3005,7 +3005,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0
-  m_GravityScale: 1
+  m_GravityScale: 2
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 0
@@ -3024,10 +3024,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerHP: 1
   allowHoldJump: 0
-  maxJumpForce: 5
+  maxJumpForce: 7.5
   minJumpForce: 2
-  initialMovementSpeed: 2.5
-  groundPoundForce: 6
+  initialMovementSpeed: 3
+  groundPoundForce: 12.5
   minimumPlayerDamage: 1
   maximumPlayerDamage: 3
   percentageDamageMinimum: 0.2
@@ -3042,7 +3042,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   raycastLength: 0.3
-  GroundedRecoverForce: 1.5
+  GroundedRecoverForce: 3
   deathDelay: 1
   deadCameraShakeTime: 0.5
   deadCameraShakeSpeed: 15
@@ -9573,7 +9573,11 @@ Prefab:
     - target: {fileID: 114028153015435748, guid: 28fba8864523a374fa4881d765b9b954,
         type: 2}
       propertyPath: speed
-      value: 0.75
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1082115679142760, guid: 28fba8864523a374fa4881d765b9b954, type: 2}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 28fba8864523a374fa4881d765b9b954, type: 2}

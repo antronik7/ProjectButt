@@ -11,7 +11,8 @@ public class PlayerController : MonoBehaviour {
         GroundPounding,
         Falling,
         Grounded,
-        CrashingTroughBlocks
+        CrashingTroughBlocks,
+        GroundedRecovory
     }
 
     [SerializeField]
@@ -89,7 +90,7 @@ public class PlayerController : MonoBehaviour {
         float g = rBody.gravityScale * Physics2D.gravity.magnitude;
         float v0 = maxJumpForce / rBody.mass; // converts the jumpForce to an initial velocity
         maxJumpY = (v0 * v0) / (2 * g) - 0.04f;
-        //Debug.Log(maxJumpY);
+        Debug.Log(maxJumpY);
     }
 	
 	// Update is called once per frame
@@ -107,9 +108,16 @@ public class PlayerController : MonoBehaviour {
         // Inputs
         if (enableJumping && (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)))
         {
-            if(playerState == PlayerState.Running)
+            if(playerState == PlayerState.Running || playerState == PlayerState.GroundedRecovory)
             {
                 startJumpHeight = transform.position.y;
+
+                if (playerState == PlayerState.GroundedRecovory)
+                {
+                    Debug.Log("bien la");
+                    Walk();
+                }
+
                 Jump(maxJumpForce);
             }
             else if (playerState == PlayerState.Jumping)
@@ -131,11 +139,12 @@ public class PlayerController : MonoBehaviour {
             if(playerState == PlayerState.Grounded)
             {
                 rBody.velocity = new Vector3(0f, GroundedRecoverForce, 0f);
-                playerState = PlayerState.Falling;
+                playerState = PlayerState.GroundedRecovory;
                 animator.SetTrigger("StopGrounded");
             }
         }
 
+        Debug.Log(playerState);
         //Debug.DrawRay(transform.position, Vector3.right * raycastLength, Color.red);
         //Debug.Log(playerState);
     }
