@@ -3033,8 +3033,8 @@ MonoBehaviour:
   percentageDamageMinimum: 0.2
   percentageDamageMaximum: 0.8
   cameraShakeTime: 0.15
-  cameraShakeSpeed: 15
-  cameraShakeMagnitude: 0.25
+  cameraShakeSpeed: 20
+  cameraShakeMagnitude: 0.5
   groundLayer:
     serializedVersion: 2
     m_Bits: 256
