@@ -12,7 +12,8 @@ public class PlayerController : MonoBehaviour {
         Falling,
         Grounded,
         CrashingTroughBlocks,
-        GroundedRecovory
+        GroundedRecovory,
+        WallJumping
     }
 
     [SerializeField]
