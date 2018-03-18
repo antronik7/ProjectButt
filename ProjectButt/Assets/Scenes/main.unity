@@ -3027,11 +3027,14 @@ MonoBehaviour:
   maxJumpForce: 7.5
   minJumpForce: 2
   initialMovementSpeed: 3
+  maxWallJumpFallSpeed: -1.75
+  wallJumpForce: 5
   groundPoundForce: 12.5
   minimumPlayerDamage: 1
   maximumPlayerDamage: 3
   percentageDamageMinimum: 0.2
   percentageDamageMaximum: 0.8
+  GroundedRecoverForce: 3
   cameraShakeTime: 0.15
   cameraShakeSpeed: 20
   cameraShakeMagnitude: 0.5
@@ -3042,7 +3045,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   raycastLength: 0.3
-  GroundedRecoverForce: 3
   deathDelay: 1
   deadCameraShakeTime: 0.5
   deadCameraShakeSpeed: 15

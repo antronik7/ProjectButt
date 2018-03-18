@@ -16,8 +16,11 @@ public class PlayerController : MonoBehaviour {
         WallJumping
     }
 
+    [Header("HP")]
     [SerializeField]
     int playerHP = 1;
+
+    [Header("Jump")]
     [SerializeField]
     bool allowHoldJump = true;
     [SerializeField]
@@ -26,6 +29,12 @@ public class PlayerController : MonoBehaviour {
     float minJumpForce = 0.25f;
     [SerializeField]
     float initialMovementSpeed = 1f;
+    [SerializeField]
+    float maxWallJumpFallSpeed = -1f;
+    [SerializeField]
+    float wallJumpForce = 1f;
+
+    [Header("Ground Pound")]
     [SerializeField]
     float groundPoundForce = 1f;
     [SerializeField]
@@ -37,19 +46,25 @@ public class PlayerController : MonoBehaviour {
     [SerializeField]
     float percentageDamageMaximum = 0.8f;
     [SerializeField]
+    float GroundedRecoverForce = 1.5f;
+
+    [Header("Camera Shake")]
+    [SerializeField]
     float cameraShakeTime = 1f;
     [SerializeField]
     float cameraShakeSpeed = 1f;
     [SerializeField]
     float cameraShakeMagnitude = 1f;
+
+    [Header("Physic Layers")]
     [SerializeField]
     LayerMask groundLayer;
     [SerializeField]
     LayerMask wallLayer;
     [SerializeField]
     float raycastLength = 0.6f;
-    [SerializeField]
-    float GroundedRecoverForce = 1.5f;
+
+    [Header("Death")]
     [SerializeField]
     float deathDelay = 1.0f;
     [SerializeField]
@@ -115,11 +130,16 @@ public class PlayerController : MonoBehaviour {
 
                 if (playerState == PlayerState.GroundedRecovory)
                 {
-                    Debug.Log("bien la");
                     Walk();
                 }
 
                 Jump(maxJumpForce);
+            }
+            else if (playerState == PlayerState.WallJumping)
+            {
+                InverseDirection();
+                Walk();
+                Jump(wallJumpForce);
             }
             else if (playerState == PlayerState.Jumping)
             {
@@ -155,22 +175,27 @@ public class PlayerController : MonoBehaviour {
         if (disableGameplay)
             return;
 
-        if (GroundCheck())
+        bool grounded = GroundCheck();
+        bool againstWall = WallCheck();
+
+        if (playerState == PlayerState.WallJumping)
+            rBody.velocity = new Vector2(rBody.velocity.x, maxWallJumpFallSpeed);
+
+        if (grounded)
         {
             if (playerState == PlayerState.GroundPounding)
             {
                 playerState = PlayerState.Running;
-
                 DamageBlocks();
+            }
+            else if (playerState == PlayerState.CrashingTroughBlocks)
+            {
+                playerState = PlayerState.Grounded; // FUNCTION FUNCTION FUNCTION
+                animator.SetTrigger("Grounded");
             }
             else if (playerState != PlayerState.Grounded && playerState != PlayerState.CrashingTroughBlocks)
             {
                 playerState = PlayerState.Running;
-            }
-            else if(playerState == PlayerState.CrashingTroughBlocks)
-            {
-                playerState = PlayerState.Grounded; // FUNCTION FUNCTION FUNCTION
-                animator.SetTrigger("Grounded");
             }
         }
         else
@@ -179,9 +204,12 @@ public class PlayerController : MonoBehaviour {
                 playerState = PlayerState.Falling;
         }
 
-        if (WallCheck())
+        if (WallCheck())// QUICK CHANGE THIS
         {
-            InverseDirection();
+            if (grounded)
+                InverseDirection();
+            else
+                playerState = PlayerState.WallJumping;
         }
 
         previousVelocityY = rBody.velocity.y;
@@ -286,7 +314,6 @@ public class PlayerController : MonoBehaviour {
     {
         currentDirection *= -1;
         currentMovementSpeed *= -1;
-        rBody.velocity = new Vector3(currentMovementSpeed, rBody.velocity.y, 0f);// MAYBE NOT NECESSARY
     }
 
     int CalculateDamage()
