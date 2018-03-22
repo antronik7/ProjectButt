@@ -9,7 +9,7 @@ public class BlockController : MonoBehaviour {
     [SerializeField]
     int blockScore = 1;
     [SerializeField]
-    SpriteRenderer[] blockSprites;
+    SpriteRenderer crackSprite;
     [SerializeField]
     Vector3 positionPool;
     [SerializeField]
@@ -19,6 +19,7 @@ public class BlockController : MonoBehaviour {
     // Use this for initialization
     void Start () {
         currentBlockHP = blockHP;
+        ChangeBlockVisual();
 	}
 	
 	// Update is called once per frame
@@ -52,10 +53,6 @@ public class BlockController : MonoBehaviour {
         currentBlockHP = blockHP;
         ChangeBlockVisual();
         spikes.Clear();
-        for (int i = 0; i < blockSprites.Length; ++i)
-        {
-            blockSprites[i].color = new Color(1f, 1f, 1f, 1f);
-        }
     }
 
     public int GetCurrentHp()
@@ -78,13 +75,9 @@ public class BlockController : MonoBehaviour {
 
     void ChangeBlockVisual()
     {
-        for (int i = 0; i < blockSprites.Length; ++i)
-        {
-            float alpha = (float)currentBlockHP / (float)blockHP;
-            blockSprites[i].color = new Color(1f, 1f, 1f, alpha);
-
-            if (i < spikes.Count)
-                spikes[i].ChangeBlockVisual(alpha);
-        }
+        if (currentBlockHP == 1)
+            crackSprite.enabled = true;
+        else
+            crackSprite.enabled = false;
     }
 }

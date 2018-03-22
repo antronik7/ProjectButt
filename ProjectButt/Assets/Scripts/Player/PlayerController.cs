@@ -30,6 +30,8 @@ public class PlayerController : MonoBehaviour {
     [SerializeField]
     float initialMovementSpeed = 1f;
     [SerializeField]
+    float wallJumpFallSpeed = -0.1f;
+    [SerializeField]
     float maxWallJumpFallSpeed = -1f;
     [SerializeField]
     float wallJumpForce = 1f;
@@ -179,7 +181,7 @@ public class PlayerController : MonoBehaviour {
         bool againstWall = WallCheck();
 
         if (playerState == PlayerState.WallJumping)
-            rBody.velocity = new Vector2(rBody.velocity.x, maxWallJumpFallSpeed);
+            rBody.velocity = new Vector2(rBody.velocity.x, Mathf.Max(maxWallJumpFallSpeed, rBody.velocity.y + wallJumpFallSpeed));
 
         if (grounded)
         {
@@ -204,7 +206,7 @@ public class PlayerController : MonoBehaviour {
                 playerState = PlayerState.Falling;
         }
 
-        if (WallCheck())// QUICK CHANGE THIS
+        if (againstWall)
         {
             if (grounded)
                 InverseDirection();
