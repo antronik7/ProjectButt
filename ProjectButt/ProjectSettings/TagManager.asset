@@ -15,7 +15,7 @@ TagManager:
   - 
   - Ground
   - Wall
-  - 
+  - Chunks
   - 
   - 
   - 
@@ -40,6 +40,9 @@ TagManager:
   m_SortingLayers:
   - name: Background
     uniqueID: 3926367569
+    locked: 0
+  - name: Blocks
+    uniqueID: 1944121787
     locked: 0
   - name: Default
     uniqueID: 0

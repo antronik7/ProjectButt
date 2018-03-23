@@ -113,7 +113,7 @@ e9bdabf9265d758d56f01bb188916fa8 UnityEngine.Networking.dll:UnityEngine.Networki
 9de3a22eca9aefadba2d10d5987cefe3 UnityEngine.SpatialTracking.dll:UnityEngine.SpatialTracking.TrackedPoseDriver
 322cb40e1e282f28af980cbef7922a90 UnityEngine.Analytics.dll:UnityEngine.Analytics.AnalyticsEventTracker
 dc07d7ad69b399a46e92c483bf1c04ca UnityEngine.Analytics.dll:UnityEngine.Analytics.AnalyticsTracker
-3c8eb780a7dba7a7686eb1b7400db384 Assembly-CSharp.dll:.BlockController
+bddc455ebe816c581a0e3b52cb518bef Assembly-CSharp.dll:.BlockController
 bc68edb0af574bf79f9550ead8ebae5c UnityEngine.HoloLens.dll:UnityEngine.Audio.AudioSpatializerMicrosoft
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.HoloLens.dll:UnityEngine.EventSystems.HoloLensInput
 463516d5b5fe8e67a0a24c48f2095b04 UnityEngine.HoloLens.dll:UnityEngine.EventSystems.HoloLensInputModule
@@ -154,3 +154,4 @@ c2275a8bfbb9f9942cad75ecdfded41d UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.Spa
 29c851e8b6740b28303c6f8a8ba4d849 Assembly-CSharp.dll:.BackgroundScroller
 7ad6b6a99e63d388e1c1781c3a38ce93 Assembly-CSharp.dll:.ChangeScene
 251debc22ba666eb20a9ac1cdae39b2c Assembly-CSharp.dll:.SpikeController
+471a0ae8e00b0087701735943f762f75 Assembly-CSharp.dll:.ChunkController

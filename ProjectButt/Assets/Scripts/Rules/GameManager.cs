@@ -108,11 +108,30 @@ public class GameManager : MonoBehaviour {
         StartCoroutine("RestartLevel");
     }
 
+    public void Sleep(float duration)
+    {
+        IEnumerator coroutine = Sleeping(duration);
+        StartCoroutine(coroutine);
+    }
+
     IEnumerator RestartLevel()
     {
         yield return new WaitForSeconds(3f);
         UIController.instance.StartTransition(UIController.Transition.LeftToRight);
         yield return new WaitForSeconds(2f);
         SceneManager.LoadScene("main");
+    }
+
+    IEnumerator Sleeping(float duration)
+    {
+        Time.timeScale = 0.0f;
+
+        float sleepEndTime = Time.realtimeSinceStartup + duration;
+        while (Time.realtimeSinceStartup < sleepEndTime)
+        {
+            yield return 0;
+        }
+
+        Time.timeScale = 1;
     }
 }

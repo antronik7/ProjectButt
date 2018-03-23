@@ -11,9 +11,20 @@ public class BlockController : MonoBehaviour {
     [SerializeField]
     SpriteRenderer crackSprite;
     [SerializeField]
+    SpriteRenderer impactSprite;
+    [SerializeField]
+    float impactSpriteDuration = 0.2f;
+    [SerializeField]
+    float impactSleepDuration = 0.02f;
+    [SerializeField]
     Vector3 positionPool;
     [SerializeField]
     List<SpikeController> spikes = new List<SpikeController>();
+    [SerializeField]
+    float numberChunks;
+    [SerializeField]
+    GameObject[] chunks;
+
     int currentBlockHP;
 
     // Use this for initialization
@@ -41,6 +52,8 @@ public class BlockController : MonoBehaviour {
     public void DamageBlock(int damageValue)
     {
         currentBlockHP -= damageValue;
+        StartCoroutine("ShowImpact");
+        GameManager.instance.Sleep(impactSleepDuration);
 
         if (currentBlockHP <= 0)
             DestroyBlock();
@@ -62,6 +75,8 @@ public class BlockController : MonoBehaviour {
 
     void DestroyBlock()
     {
+        LaunchChunks();
+
         if(blockScore > 0)
             GameManager.instance.AddScore(blockScore);
 
@@ -79,5 +94,26 @@ public class BlockController : MonoBehaviour {
             crackSprite.enabled = true;
         else
             crackSprite.enabled = false;
+    }
+
+    void LaunchChunks()
+    {
+        int currentChunkIndex = 0;
+
+        for (int i = 0; i < numberChunks; i++)
+        {
+            Instantiate(chunks[currentChunkIndex], transform.position, Quaternion.identity);
+
+            ++currentChunkIndex;
+            if (currentChunkIndex >= chunks.Length)
+                currentChunkIndex = 0;
+        }
+    }
+
+    IEnumerator ShowImpact()
+    {
+        impactSprite.enabled = true;
+        yield return new WaitForSeconds(impactSpriteDuration);
+        impactSprite.enabled = false;
     }
 }
