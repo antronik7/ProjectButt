@@ -290,10 +290,14 @@ public class PlayerController : MonoBehaviour {
         for (int i = 0; i < nbrBlocksHit; ++i)
         {
             BlockController block = blocks[i].transform.GetComponent<BlockController>();
-            block.DamageBlock(CalculateDamage());
-            if (block.GetCurrentHp() <= 0)
+
+            if(block != null)// MAYBE USE TAG
             {
-                ++nbrBlocksDestroyed;
+                block.DamageBlock(CalculateDamage());
+                if (block.GetCurrentHp() <= 0)
+                {
+                    ++nbrBlocksDestroyed;
+                }
             }
         }
 
