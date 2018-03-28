@@ -5,6 +5,10 @@ licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
     21300000: buttMan_0
+    21300002: buttMan_1
+    21300004: buttMan_2
+    21300006: buttMan_3
+    21300008: buttMan_4
   externalObjects: {}
   serializedVersion: 4
   mipmaps:
@@ -105,8 +109,36 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
+        y: 44
+        width: 22
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: buttMan_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 22
+        width: 22
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: buttMan_2
+      rect:
+        serializedVersion: 2
+        x: 0
         y: 0
-        width: 16
+        width: 22
         height: 22
       alignment: 0
       pivot: {x: 0, y: 0}
