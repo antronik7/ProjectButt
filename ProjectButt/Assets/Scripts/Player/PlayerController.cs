@@ -20,6 +20,10 @@ public class PlayerController : MonoBehaviour {
     [SerializeField]
     int playerHP = 1;
 
+    [Header("Run")]
+    [SerializeField]
+    float initialMovementSpeed = 1f;
+
     [Header("Jump")]
     [SerializeField]
     bool allowHoldJump = true;
@@ -27,8 +31,6 @@ public class PlayerController : MonoBehaviour {
     float maxJumpForce = 1f;
     [SerializeField]
     float minJumpForce = 0.25f;
-    [SerializeField]
-    float initialMovementSpeed = 1f;
     [SerializeField]
     float wallJumpFallSpeed = -0.1f;
     [SerializeField]
@@ -92,12 +94,14 @@ public class PlayerController : MonoBehaviour {
     Collider2D myCollider;
     float gravityScale;
     Animator animator;
+    SpriteRenderer spriteRender;
 
 	// Use this for initialization
 	void Start () {
         rBody = GetComponent<Rigidbody2D>();
         myCollider = GetComponent<Collider2D>();
         animator = GetComponent<Animator>();
+        spriteRender = GetComponent<SpriteRenderer>();
 
         playerState = PlayerState.CrashingTroughBlocks;
         gravityScale = rBody.gravityScale;
@@ -188,6 +192,7 @@ public class PlayerController : MonoBehaviour {
             if (playerState == PlayerState.GroundPounding)
             {
                 playerState = PlayerState.Running;
+                animator.SetTrigger("Running");
                 DamageBlocks();
             }
             else if (playerState == PlayerState.CrashingTroughBlocks)
@@ -195,9 +200,10 @@ public class PlayerController : MonoBehaviour {
                 playerState = PlayerState.Grounded; // FUNCTION FUNCTION FUNCTION
                 animator.SetTrigger("Grounded");
             }
-            else if (playerState != PlayerState.Grounded && playerState != PlayerState.CrashingTroughBlocks)
+            else if (playerState != PlayerState.Grounded && playerState != PlayerState.CrashingTroughBlocks && playerState != PlayerState.Running)
             {
                 playerState = PlayerState.Running;
+                animator.SetTrigger("Running");
             }
         }
         else
@@ -320,6 +326,7 @@ public class PlayerController : MonoBehaviour {
     {
         currentDirection *= -1;
         currentMovementSpeed *= -1;
+        spriteRender.flipX = !spriteRender.flipX;
     }
 
     int CalculateDamage()
