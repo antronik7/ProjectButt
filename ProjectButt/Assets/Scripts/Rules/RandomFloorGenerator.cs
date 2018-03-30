@@ -105,7 +105,7 @@ public class RandomFloorGenerator : MonoBehaviour {
             else if (randomRatio > ratioBlock1 && randomRatio <= ratioBlock1 + ratioBlock2)
             {
                 blocks2[currentIndexBlock2].ResetBlock();
-                blocks2[currentIndexBlock2].PlaceBlock(blockX + 0.25f, currentFloorY);
+                blocks2[currentIndexBlock2].PlaceBlock(blockX + 0.5f, currentFloorY);
 
                 for (int i = 0; i < 2; i++)
                 {
@@ -128,7 +128,7 @@ public class RandomFloorGenerator : MonoBehaviour {
             else if (randomRatio > ratioBlock1 + ratioBlock2 && randomRatio <= ratioBlock1 + ratioBlock2 + ratioBlock3)
             {
                 blocks3[currentIndexBlock3].ResetBlock();
-                blocks3[currentIndexBlock3].PlaceBlock(blockX + 0.5f, currentFloorY);
+                blocks3[currentIndexBlock3].PlaceBlock(blockX + 1f, currentFloorY);
 
                 for (int i = 0; i < 3; i++)
                 {
