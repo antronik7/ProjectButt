@@ -4,66 +4,90 @@ using UnityEngine;
 
 public class RandomFloorGenerator : MonoBehaviour {
 
+    enum blockTypes
+    {
+        Block,
+        Metal,
+        Saw
+    }
+
+    class floorRules
+    {
+        public int minimumLevel;
+        public int ratioBlock;
+        public int ratioMetal;
+        public int ratioSaw;
+        public int maxNbrMetal;
+        public int maxNbrSaw;
+    }
+
+    [SerializeField]
+    floorRules[] floorsRules;
     [SerializeField]
     int numberBlocks = 11;
     [SerializeField]
-    float firstFloorY = -2.5f;
+    float firstFloorY = -5f;
     [SerializeField]
-    float floorsDistance = 2.5f;
+    float floorsDistance = 5f;
     [SerializeField]
-    float firstBlockX = -2.5f;
+    float firstBlockX = -5f;
     [SerializeField]
-    float blockDistance = 0.5f;
+    float blockDistance = 1f;
     [SerializeField]
     BlockController[] blocks1;
     [SerializeField]
-    int ratioBlock1 = 0;
-    [SerializeField]
     BlockController[] blocks2;
     [SerializeField]
-    int ratioBlock2 = 0;
-    [SerializeField]
     BlockController[] blocks3;
-    [SerializeField]
-    int ratioBlock3 = 0;
-    [SerializeField]
-    SpikeController[] spikes;
-    [SerializeField]
-    int spikePercentage = 25;
-    [SerializeField]
-    int maximumSpikesPerFloor = 2;
-    [SerializeField]
-    FloorController[] floorControllers;
 
     int currentIndexBlock1 = 0;
     int currentIndexBlock2 = 0;
     int currentIndexBlock3 = 0;
-    int currentIndexSpikes = 0;
-    int currentIndexFloorController = 0;
-    float currentFloorY;
 
-    void Awake () {
-        
-	}
+    float currentFloorY;
+    int currentFloorRulesIndex = 0;
+
+    blockTypes[] previousFloorBlocks;
+
+    //Awake is always called before any Start functions
+    void Awake()
+    {
+        for (int i = 0; i < numberBlocks; ++i)
+        {
+            previousFloorBlocks[i] = blockTypes.Block;
+        }
+    }
 
     // Use this for initialization
     void Start()
     {
         currentFloorY = firstFloorY;
-        GenerateOneFloor();
-        GenerateOneFloor();
-        GenerateOneFloor();
-        GenerateOneFloor();
     }
 
     // Update is called once per frame
     void Update () {
-		
+        if (GameManager.instance.playerY < (GameManager.instance.floor - 1) * (floorsDistance * -1))
+        {
+            int nextFloorRulesIndex = ++currentFloorRulesIndex;
+
+            while (nextFloorRulesIndex < floorsRules.Length && GameManager.instance.floor >= floorsRules[nextFloorRulesIndex].minimumLevel)
+            {
+                currentFloorRulesIndex = nextFloorRulesIndex;
+                ++nextFloorRulesIndex;
+            }
+
+            GameManager.instance.AddFloor();
+        }
+
 	}
 
-    // Should do an array of array...
     public void GenerateOneFloor()
     {
+        int totalRatio = floorsRules[currentFloorRulesIndex].ratioBlock + floorsRules[currentFloorRulesIndex].ratioMetal + floorsRules[currentFloorRulesIndex].ratioSaw;
+
+        if (totalRatio <= 0)
+            return;
+
         int blocksLeft = numberBlocks;
         int nbrSpikes = 0;
 
