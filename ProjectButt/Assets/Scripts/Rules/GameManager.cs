@@ -20,7 +20,6 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     UIController.Transition transitionStartLevel;
   
-
     [HideInInspector]
     public int score = 0;
     [HideInInspector]

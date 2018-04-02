@@ -52,9 +52,10 @@ public class RandomFloorGenerator : MonoBehaviour {
     //Awake is always called before any Start functions
     void Awake()
     {
+        previousFloorBlocks = new blockTypes[numberBlocks];
         for (int i = 0; i < numberBlocks; ++i)
         {
-            previousFloorBlocks[i] = blockTypes.Block;
+            previousFloorBlocks[i] = blockTypes.Block;// Maybe a list
         }
     }
 
@@ -83,25 +84,104 @@ public class RandomFloorGenerator : MonoBehaviour {
 
     public void GenerateOneFloor()
     {
-        int totalRatio = floorsRules[currentFloorRulesIndex].ratioBlock + floorsRules[currentFloorRulesIndex].ratioMetal + floorsRules[currentFloorRulesIndex].ratioSaw;
+        int ratioBlock = floorsRules[currentFloorRulesIndex].ratioBlock;
+        int ratioMetal = floorsRules[currentFloorRulesIndex].ratioBlock + floorsRules[currentFloorRulesIndex].ratioMetal;
+        int ratioSaw = ratioMetal + floorsRules[currentFloorRulesIndex].ratioSaw;
+        int totalRatio = ratioSaw;
 
         if (totalRatio <= 0)
             return;
 
-        int blocksLeft = numberBlocks;
-        int nbrSpikes = 0;
+        //Create random floor
+        blockTypes[] floorBlocks = new blockTypes[numberBlocks];
 
-        floorControllers[currentIndexFloorController].ResetFloor();
-        floorControllers[currentIndexFloorController].PlaceFloor(currentFloorY);
-
-        while(blocksLeft > 0)
+        for (int i = 0; i < numberBlocks; i++)
         {
-            int totalRatio = ratioBlock1;
-            if (blocksLeft >= 2)
-                totalRatio += ratioBlock2;
-            if (blocksLeft >= 3)
-                totalRatio += ratioBlock3;
+            int randomBlockType = Random.Range(1, totalRatio + 1);
 
+            if (randomBlockType > ratioBlock && randomBlockType <= floorsRules[currentFloorRulesIndex].ratioMetal)
+                floorBlocks[i] = blockTypes.Metal;
+            else if (randomBlockType > floorsRules[currentFloorRulesIndex].ratioMetal && randomBlockType <= floorsRules[currentFloorRulesIndex].ratioSaw) //Add rules for maximum and separating saw
+                floorBlocks[i] = blockTypes.Saw;
+            else
+                floorBlocks[i] = blockTypes.Block;
+        }
+
+        //Check if there is at least a passage from the previous floor
+        int nbrPassages = 0;
+        int[] possiblePassages = new int[numberBlocks];
+
+        for (int i = 0; i < numberBlocks && nbrPassages <= 0; i++)
+        {
+            if(previousFloorBlocks[i] == blockTypes.Block && floorBlocks[i] != blockTypes.Saw)
+            {
+                possiblePassages[nbrPassages] = i;
+                ++nbrPassages;
+            }
+        }
+
+        // Replace one dangerous block with a safe block
+        if(nbrPassages <= 0)
+        {
+            int randomBlock = Random.Range(0, nbrPassages);
+
+            int safeRatio = ratioMetal;
+            int randomBlockType = Random.Range(1, safeRatio + 1);
+
+            if (randomBlockType > ratioBlock && randomBlockType <= ratioMetal)
+                floorBlocks[randomBlock] = blockTypes.Metal;
+            else
+                floorBlocks[randomBlock] = blockTypes.Block;
+        }
+
+        //Check if there is the minimum amount of normal blocks
+        int nbrDestructableBlock = 0;
+        for (int i = 0; i < numberBlocks && nbrDestructableBlock <= 0; ++i)
+        {
+            if (floorBlocks[i] == blockTypes.Block)
+                ++nbrDestructableBlock;
+        }
+
+        if(nbrDestructableBlock <= 0)
+        {
+            int randomBlock = Random.Range(0, numberBlocks);
+            floorBlocks[randomBlock] = blockTypes.Block;
+        }
+
+        //Saved this floor
+        System.Array.Copy(floorBlocks, previousFloorBlocks, numberBlocks);
+
+        //Place the block from the pool
+        blockTypes blockType;
+        int nbrSameBlock = 0;
+        bool checkForSameBlock = true;
+
+        for (int i = 0; i < numberBlocks; i++)
+        {
+            nbrSameBlock = 1;
+            checkForSameBlock = true;
+            blockType = floorBlocks[i];
+
+            if(blockType == blockTypes.Metal)
+            {
+                while(checkForSameBlock && nbrSameBlock < 3 && i + nbrSameBlock < numberBlocks)
+                {
+
+                }
+            }
+            else if (blockType == blockTypes.Saw)
+            {
+
+            }
+            else
+            {
+
+            }
+        }
+
+
+        while (blocksLeft > 0)
+        {
             int randomRatio = Random.Range(1, totalRatio + 1);
 
             float blockX = firstBlockX + ((numberBlocks - blocksLeft) * blockDistance);
@@ -111,18 +191,6 @@ public class RandomFloorGenerator : MonoBehaviour {
                 blocks1[currentIndexBlock1].ResetBlock();
                 blocks1[currentIndexBlock1].PlaceBlock(blockX, currentFloorY);
 
-                if (nbrSpikes < maximumSpikesPerFloor && Random.Range(1, 101) <= spikePercentage)
-                {
-                    ++nbrSpikes;
-                    spikes[currentIndexSpikes].ResetSpike();
-                    spikes[currentIndexSpikes].PlaceSpike(blockX, currentFloorY);
-                    blocks1[currentIndexBlock1].AddSpike(spikes[currentIndexSpikes]);
-
-                    ++currentIndexSpikes;
-                    if (currentIndexSpikes >= spikes.Length)
-                        currentIndexSpikes = 0;
-                }
-
                 currentIndexBlock1++;
                 blocksLeft -= 1;
             }
@@ -131,21 +199,6 @@ public class RandomFloorGenerator : MonoBehaviour {
                 blocks2[currentIndexBlock2].ResetBlock();
                 blocks2[currentIndexBlock2].PlaceBlock(blockX + 0.5f, currentFloorY);
 
-                for (int i = 0; i < 2; i++)
-                {
-                    if (nbrSpikes < maximumSpikesPerFloor && Random.Range(1, 101) <= spikePercentage)
-                    {
-                        ++nbrSpikes;
-                        spikes[currentIndexSpikes].ResetSpike();
-                        spikes[currentIndexSpikes].PlaceSpike(blockX + (i * blockDistance), currentFloorY);
-                        blocks2[currentIndexBlock2].AddSpike(spikes[currentIndexSpikes]);
-
-                        ++currentIndexSpikes;
-                        if (currentIndexSpikes >= spikes.Length)
-                            currentIndexSpikes = 0;
-                    }
-                }
-
                 currentIndexBlock2++;
                 blocksLeft -= 2;
             }
@@ -153,21 +206,6 @@ public class RandomFloorGenerator : MonoBehaviour {
             {
                 blocks3[currentIndexBlock3].ResetBlock();
                 blocks3[currentIndexBlock3].PlaceBlock(blockX + 1f, currentFloorY);
-
-                for (int i = 0; i < 3; i++)
-                {
-                    if (nbrSpikes < maximumSpikesPerFloor && Random.Range(1, 101) <= spikePercentage)
-                    {
-                        ++nbrSpikes;
-                        spikes[currentIndexSpikes].ResetSpike();
-                        spikes[currentIndexSpikes].PlaceSpike(blockX + (i * blockDistance), currentFloorY);
-                        blocks3[currentIndexBlock3].AddSpike(spikes[currentIndexSpikes]);
-
-                        ++currentIndexSpikes;
-                        if (currentIndexSpikes >= spikes.Length)
-                            currentIndexSpikes = 0;
-                    }
-                }
 
                 currentIndexBlock3++;
                 blocksLeft -= 3;
@@ -187,10 +225,6 @@ public class RandomFloorGenerator : MonoBehaviour {
                 currentIndexBlock3 = 0;
         }
 
-        ++currentIndexFloorController;
         currentFloorY -= floorsDistance;
-
-        if (currentIndexFloorController >= floorControllers.Length)
-            currentIndexFloorController = 0;
     }
 }

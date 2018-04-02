@@ -19,8 +19,6 @@ public class BlockController : MonoBehaviour {
     [SerializeField]
     Vector3 positionPool;
     [SerializeField]
-    List<SpikeController> spikes = new List<SpikeController>();
-    [SerializeField]
     float numberChunks;
     [SerializeField]
     GameObject[] chunks;
@@ -37,12 +35,6 @@ public class BlockController : MonoBehaviour {
 	void Update () {
 		
 	}
-
-    //probably should do it by reference there...
-    public void AddSpike(SpikeController spikeController)
-    {
-        spikes.Add(spikeController);
-    }
 
     public void PlaceBlock(float x, float y)
     {
@@ -65,7 +57,6 @@ public class BlockController : MonoBehaviour {
     {
         currentBlockHP = blockHP;
         ChangeBlockVisual();
-        spikes.Clear();
     }
 
     public int GetCurrentHp()
@@ -79,11 +70,6 @@ public class BlockController : MonoBehaviour {
 
         if(blockScore > 0)
             GameManager.instance.AddScore(blockScore);
-
-        for (int i = 0; i < spikes.Count; ++i)
-        {
-            spikes[i].DestroySpike();
-        }
 
         transform.position = positionPool;
     }
