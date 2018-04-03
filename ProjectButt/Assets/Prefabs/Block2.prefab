@@ -184,7 +184,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2, y: 1}
+  m_Size: {x: 1.75, y: 1}
   m_EdgeRadius: 0
 --- !u!114 &114218388987692696
 MonoBehaviour:
@@ -197,6 +197,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee58abc4dc3b0c64dbf304536902bc07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canTakeDamage: 1
   blockHP: 2
   blockScore: 2
   crackSprite: {fileID: 212657447574577732}
@@ -204,7 +205,6 @@ MonoBehaviour:
   impactSpriteDuration: 0.0001
   impactSleepDuration: 0.05
   positionPool: {x: -100, y: 0, z: 0}
-  spikes: []
   numberChunks: 4
   chunks:
   - {fileID: 1919479502281032, guid: 990ef796dc6c0eb40b6ad0a1fdd6d12b, type: 2}

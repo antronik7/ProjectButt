@@ -5,6 +5,8 @@ using UnityEngine;
 public class BlockController : MonoBehaviour {
 
     [SerializeField]
+    bool canTakeDamage = true;
+    [SerializeField]
     int blockHP = 5;
     [SerializeField]
     int blockScore = 1;
@@ -43,6 +45,9 @@ public class BlockController : MonoBehaviour {
 
     public void DamageBlock(int damageValue)
     {
+        if (!canTakeDamage)
+            return;
+
         currentBlockHP -= damageValue;
         StartCoroutine("ShowImpact");
         GameManager.instance.Sleep(impactSleepDuration);
@@ -76,6 +81,9 @@ public class BlockController : MonoBehaviour {
 
     void ChangeBlockVisual()
     {
+        if (!canTakeDamage)
+            return;
+
         if (currentBlockHP == 1)
             crackSprite.enabled = true;
         else

@@ -259,14 +259,14 @@ public class PlayerController : MonoBehaviour {
                 return true;
             }
 
-            Vector3 positionRay = new Vector3(transform.position.x - 0.26f, transform.position.y, transform.position.z);
+            Vector3 positionRay = new Vector3(transform.position.x - 0.4375f, transform.position.y, transform.position.z);
 
             if (Physics2D.Raycast(positionRay, Vector3.down, raycastLength, groundLayer))
             {
                 return true;
             }
 
-            positionRay = new Vector3(transform.position.x + 0.26f, transform.position.y, transform.position.z);
+            positionRay = new Vector3(transform.position.x + 0.4375f, transform.position.y, transform.position.z);
 
             if (Physics2D.Raycast(positionRay, Vector3.down, raycastLength, groundLayer))
             {
@@ -291,7 +291,7 @@ public class PlayerController : MonoBehaviour {
     {
         int nbrBlocksDestroyed = 0;
 
-        RaycastHit2D[] blocks = Physics2D.BoxCastAll(new Vector2(transform.position.x, transform.position.y - raycastLength), new Vector2(0.55f, 0.1f), 0, Vector2.zero, 0, groundLayer);// VARIABLE VARIABLE VARIABLE
+        RaycastHit2D[] blocks = Physics2D.BoxCastAll(new Vector2(transform.position.x, transform.position.y - raycastLength), new Vector2(0.875f, 0.1f), 0, Vector2.zero, 0, groundLayer);// VARIABLE VARIABLE VARIABLE
         int nbrBlocksHit = blocks.Length;
         for (int i = 0; i < nbrBlocksHit; ++i)
         {
