@@ -191,8 +191,6 @@ public class PlayerController : MonoBehaviour {
         {
             if (playerState == PlayerState.GroundPounding)
             {
-                playerState = PlayerState.Running;
-                animator.SetTrigger("Running");
                 DamageBlocks();
             }
             else if (playerState == PlayerState.CrashingTroughBlocks)
@@ -217,7 +215,10 @@ public class PlayerController : MonoBehaviour {
             if (grounded)
                 InverseDirection();
             else
+            {
                 playerState = PlayerState.WallJumping;
+                animator.SetTrigger("WallSliding");
+            }
         }
 
         previousVelocityY = rBody.velocity.y;
@@ -231,6 +232,7 @@ public class PlayerController : MonoBehaviour {
     void Jump(float jumpForce)
     {
         playerState = PlayerState.Jumping;
+        animator.SetTrigger("Jumping");
         rBody.velocity = new Vector3(rBody.velocity.x, jumpForce, 0f);
     }
 
@@ -245,7 +247,6 @@ public class PlayerController : MonoBehaviour {
 
     void EndGroundPound()
     {
-        animator.SetTrigger("StopGroundPound");
         rBody.gravityScale = gravityScale;
         rBody.velocity = new Vector3(0f, groundPoundForce * -1, 0f);
     }
@@ -370,8 +371,8 @@ public class PlayerController : MonoBehaviour {
 
     void PlayerDeath()
     {
-        rBody.gravityScale = 1;
-        rBody.velocity = new Vector3(0f, 6f, 0f); // VARIABLE VARIABLE VARIABLE
+        rBody.gravityScale = 3;// VARIABLE VARIABLE VARIABLE
+        rBody.velocity = new Vector3(0f, 10f, 0f); // VARIABLE VARIABLE VARIABLE
         animator.SetTrigger("Dead");
     }
 
