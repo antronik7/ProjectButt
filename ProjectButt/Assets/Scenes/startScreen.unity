@@ -250,13 +250,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerHP: 1
   initialMovementSpeed: 0
-  allowHoldJump: 0
-  maxJumpForce: 10
-  minJumpForce: 2
+  allowHoldJump: 1
+  maxJumpForce: 11
+  minJumpForce: 5
   wallJumpFallSpeed: -0.5
   maxWallJumpFallSpeed: -2.5
-  wallJumpForce: 10
+  wallJumpForce: 11
   groundPoundForce: 15
+  timeFreezeInAir: 0.1
   minimumPlayerDamage: 1
   maximumPlayerDamage: 1
   percentageDamageMinimum: 0.2
@@ -678,6 +679,7 @@ MonoBehaviour:
   maxWallJumpFallSpeed: -1
   wallJumpForce: 1
   groundPoundForce: 12.5
+  timeFreezeInAir: 0.25
   minimumPlayerDamage: 1
   maximumPlayerDamage: 1
   percentageDamageMinimum: 0.2
@@ -980,7 +982,6 @@ MonoBehaviour:
   wallOfDeath: {fileID: 0}
   myCamera: {fileID: 0}
   floorGenerator: {fileID: 0}
-  wallOfDeathSpeedModificator: 0.1
   transitionStartLevel: 1
   score: 0
   floor: 1
@@ -1097,7 +1098,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: '( v 0.3.0 )
+  m_Text: '( v 0.3.2 )
 
 '
 --- !u!222 &1461798401

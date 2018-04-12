@@ -16,8 +16,6 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     RandomFloorGenerator floorGenerator;
     [SerializeField]
-    float wallOfDeathSpeedModificator = 0.1f;
-    [SerializeField]
     UIController.Transition transitionStartLevel;
   
     [HideInInspector]
@@ -65,13 +63,10 @@ public class GameManager : MonoBehaviour {
         UIController.instance.StartTransition(transitionStartLevel);
         playerController.DisablePlayerRunning();
         playerController.DisablePlayerJumping();
-        wallOfDeath.SetWallCanMove(true);
-        yield return new WaitForSeconds(1.5f);
-        CameraShaker.instance.startCameraShake(1.5f, 15f, 0.25f);
-        yield return new WaitForSeconds(1.5f);
-        wallOfDeath.SetWallCanMove(false);
-        yield return new WaitForSeconds(1f);
-        wallOfDeath.SetWallCanMove(true);
+        yield return new WaitForSeconds(0.5f);
+        wallOfDeath.StartAnimation();
+        yield return new WaitForSeconds(4.0f);
+        wallOfDeath.StartWall();
         playerController.EnablePlayerRunning();
         playerController.EnablePlayerJumping();
 
@@ -89,8 +84,6 @@ public class GameManager : MonoBehaviour {
     public void AddFloor()
     {
         ++floor;
-        if (floor % 10 == 0)
-            wallOfDeath.ModifySpeed(wallOfDeathSpeedModificator);
 
         if (stopGeneratingFloor)
             return;
@@ -100,7 +93,7 @@ public class GameManager : MonoBehaviour {
 
     public void PlayerGotKill()
     {
-        wallOfDeath.SetWallCanMove(false);
+        wallOfDeath.StopWall();
         myCamera.SetFollowPlayer(false);
         backgroundScroller.DisableScrolling();
         stopGeneratingFloor = true;

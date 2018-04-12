@@ -42,6 +42,8 @@ public class PlayerController : MonoBehaviour {
     [SerializeField]
     float groundPoundForce = 1f;
     [SerializeField]
+    float timeFreezeInAir = 0.25f;
+    [SerializeField]
     int minimumPlayerDamage = 1;
     [SerializeField]
     int maximumPlayerDamage = 3;
@@ -111,7 +113,7 @@ public class PlayerController : MonoBehaviour {
 
         float g = rBody.gravityScale * Physics2D.gravity.magnitude;
         float v0 = maxJumpForce / rBody.mass; // converts the jumpForce to an initial velocity
-        maxJumpY = (v0 * v0) / (2 * g) - 0.04f;
+        maxJumpY = (v0 * v0) / (2 * g);
         Debug.Log(maxJumpY);
     }
 	
@@ -124,7 +126,7 @@ public class PlayerController : MonoBehaviour {
         // States
         if (enableRunning && playerState == PlayerState.Running)
         {
-            Walk();
+            //Walk();
         }
 
         // Inputs
@@ -135,6 +137,10 @@ public class PlayerController : MonoBehaviour {
                 startJumpHeight = transform.position.y;
 
                 if (playerState == PlayerState.GroundedRecovory)
+                {
+                    Walk();
+                }
+                else
                 {
                     Walk();
                 }
@@ -200,6 +206,7 @@ public class PlayerController : MonoBehaviour {
             }
             else if (playerState != PlayerState.Grounded && playerState != PlayerState.CrashingTroughBlocks && playerState != PlayerState.Running)
             {
+                rBody.velocity = Vector3.zero;
                 playerState = PlayerState.Running;
                 animator.SetTrigger("Running");
             }
@@ -243,6 +250,7 @@ public class PlayerController : MonoBehaviour {
         rBody.velocity = Vector3.zero;
         rBody.gravityScale = 0;
         animator.SetTrigger("GroundPound");
+        Invoke("EndGroundPound", timeFreezeInAir);
     }
 
     void EndGroundPound()
@@ -280,7 +288,7 @@ public class PlayerController : MonoBehaviour {
 
     bool WallCheck()
     {
-        if (Physics2D.Raycast(transform.position, Vector3.right * currentDirection, raycastLength, wallLayer))
+        if (Physics2D.Raycast(transform.position, Vector3.right * currentDirection, raycastLength * 0.61f, wallLayer))// CHANGER CHANGER CHANGER
         {
             return true;
         }

@@ -19,7 +19,9 @@ public class RandomFloorGenerator : MonoBehaviour {
         public int ratioMetal = 0;
         public int ratioSaw = 0;
         public int maxNbrMetal = 0;
-        public int maxNbrSaw = 0;
+        public int maxNbrSaw = 1;
+        public int maxLenghtSaw = 2;
+        public int minDistanceBetweenSaw = 1;
     }
 
     [SerializeField]
@@ -92,7 +94,7 @@ public class RandomFloorGenerator : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        if (GameManager.instance.playerY < (GameManager.instance.floor - 1) * (floorsDistance * -1))
+        if (GameManager.instance.playerY < (GameManager.instance.floor - 1) * (floorsDistance * -1))// Function in gamemanager
         {
             int nextFloorRulesIndex = currentFloorRulesIndex + 1;
 
@@ -109,53 +111,111 @@ public class RandomFloorGenerator : MonoBehaviour {
     public void GenerateOneFloor()
     {
         int ratioBlock = floorsRules[currentFloorRulesIndex].ratioBlock;
-        int ratioMetal = floorsRules[currentFloorRulesIndex].ratioBlock + floorsRules[currentFloorRulesIndex].ratioMetal;
-        int ratioSaw = ratioMetal + floorsRules[currentFloorRulesIndex].ratioSaw;
-        int totalRatio = ratioSaw;
+        int ratioMetal = floorsRules[currentFloorRulesIndex].ratioMetal;
+        int ratioSaw = floorsRules[currentFloorRulesIndex].ratioSaw;
+        int totalRatio = ratioBlock + ratioMetal + ratioSaw;
+
+        int currentRatioSaw = ratioSaw;
 
         if (totalRatio <= 0)
             return;
 
         //Create random floor
         BlockTypes[] floorBlocks = new BlockTypes[numberBlocks];
+        bool canPlaceSaw = true;
+        int currentLenghtSaw = 0;
+        int currentNbrSaw = 0;
+        int currentDistancePreviousSaw = floorsRules[currentFloorRulesIndex].minDistanceBetweenSaw;
 
+        BlockTypes previousBlock = BlockTypes.Block;
         for (int i = 0; i < numberBlocks; i++)
         {
-            int randomBlockType = Random.Range(1, totalRatio + 1);
+            bool placingSaw = false;// sortir declaration de la boucle
+            totalRatio = ratioBlock + ratioMetal + currentRatioSaw;
 
-            if (randomBlockType > ratioBlock && randomBlockType <= ratioMetal)
-                floorBlocks[i] = BlockTypes.Metal;
-            else if (randomBlockType > ratioMetal && randomBlockType <= ratioSaw) //Add rules for maximum and separating saw
-                floorBlocks[i] = BlockTypes.Saw;
+            int randomBlockType = Random.Range(1, totalRatio + 1);
+            BlockTypes blockToPlace;
+
+            if (randomBlockType > ratioBlock && randomBlockType <= ratioMetal + ratioBlock)
+                blockToPlace = BlockTypes.Metal;
+            else if (randomBlockType > ratioMetal + ratioBlock && randomBlockType <= currentRatioSaw + ratioBlock + ratioMetal)
+            {
+                blockToPlace = BlockTypes.Saw;
+                placingSaw = true;
+                Debug.Log("wtf");
+            }
             else
-                floorBlocks[i] = BlockTypes.Block;
+            {
+                blockToPlace = BlockTypes.Block;
+            }
+
+            floorBlocks[i] = blockToPlace;
+
+            if (placingSaw)
+            {
+                ++currentLenghtSaw;
+                currentDistancePreviousSaw = 0;
+
+                if(previousBlock == BlockTypes.Saw)
+                {
+                    if (currentLenghtSaw >= floorsRules[currentFloorRulesIndex].maxLenghtSaw)
+                        currentRatioSaw = 0;
+                }
+                else
+                {
+                    ++currentNbrSaw;
+
+                    if (currentNbrSaw >= floorsRules[currentFloorRulesIndex].maxNbrSaw)
+                    {
+                        canPlaceSaw = false;
+                        currentRatioSaw = 0;
+                    }
+
+                }
+            }
+            else
+            {
+                if (canPlaceSaw)
+                {
+                    ++currentDistancePreviousSaw;
+
+                    if (currentDistancePreviousSaw >= floorsRules[currentFloorRulesIndex].minDistanceBetweenSaw)
+                        currentRatioSaw = ratioSaw;
+                }
+            }
+
+            previousBlock = blockToPlace;
         }
 
         //Check if there is at least a passage from the previous floor
         int nbrPassages = 0;
+        int nbrPossiblePassages = 0;
         int[] possiblePassages = new int[numberBlocks];
 
         for (int i = 0; i < numberBlocks && nbrPassages <= 0; i++)
         {
-            if(previousFloorBlocks[i] == BlockTypes.Block && floorBlocks[i] != BlockTypes.Saw)
+            if(previousFloorBlocks[i] == BlockTypes.Block)
             {
-                possiblePassages[nbrPassages] = i;
-                ++nbrPassages;
+                possiblePassages[nbrPossiblePassages] = i;
+                ++nbrPossiblePassages;
+
+                if(floorBlocks[i] != BlockTypes.Saw)
+                    ++nbrPassages;
             }
         }
 
         // Replace one dangerous block with a safe block
         if(nbrPassages <= 0)
         {
-            int randomBlock = Random.Range(0, nbrPassages);
+            int randomBlock = Random.Range(0, nbrPossiblePassages);
 
             int safeRatio = ratioMetal;
             int randomBlockType = Random.Range(1, safeRatio + 1);
 
             if (randomBlockType > ratioBlock && randomBlockType <= ratioMetal)
-                floorBlocks[randomBlock] = BlockTypes.Metal;
+                floorBlocks[possiblePassages[randomBlock]] = BlockTypes.Metal;
             else
-                floorBlocks[randomBlock] = BlockTypes.Block;
+                floorBlocks[possiblePassages[randomBlock]] = BlockTypes.Block;
         }
 
         //Check if there is the minimum amount of normal blocks

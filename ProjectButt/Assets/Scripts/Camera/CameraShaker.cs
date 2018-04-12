@@ -23,6 +23,7 @@ public class CameraShaker : MonoBehaviour {
             Destroy(gameObject);
 
         cameraTransform = Camera.main.transform;
+        originalPosition = cameraTransform.localPosition;
     }
 
     // Use this for initialization
@@ -40,8 +41,8 @@ public class CameraShaker : MonoBehaviour {
         if (magnitude >= previousMagnitude)
             StopCoroutine("ShakeCamera");
 
-        originalPosition = cameraTransform.localPosition;
         StartCoroutine(ShakeCamera(duration, speed, magnitude));
+        previousMagnitude = magnitude;
     }
 
     IEnumerator ShakeCamera(float duration, float speed, float magnitude)
