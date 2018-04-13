@@ -181,6 +181,8 @@ public class RandomFloorGenerator : MonoBehaviour {
 
                     if (currentDistancePreviousSaw >= floorsRules[currentFloorRulesIndex].minDistanceBetweenSaw)
                         currentRatioSaw = ratioSaw;
+                    else
+                        currentRatioSaw = 0;
                 }
             }
 

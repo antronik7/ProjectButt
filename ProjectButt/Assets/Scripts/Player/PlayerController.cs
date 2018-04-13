@@ -126,7 +126,7 @@ public class PlayerController : MonoBehaviour {
         // States
         if (enableRunning && playerState == PlayerState.Running)
         {
-            //Walk();
+            Walk();
         }
 
         // Inputs
@@ -140,10 +140,10 @@ public class PlayerController : MonoBehaviour {
                 {
                     Walk();
                 }
-                else
-                {
-                    Walk();
-                }
+                //else
+                //{
+                //    Walk();
+                //}
 
                 Jump(maxJumpForce);
             }

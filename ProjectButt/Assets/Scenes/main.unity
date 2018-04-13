@@ -2689,7 +2689,7 @@ MonoBehaviour:
   minJumpForce: 3
   wallJumpFallSpeed: -0.5
   maxWallJumpFallSpeed: -2.5
-  wallJumpForce: 7.5
+  wallJumpForce: 8
   groundPoundForce: 25
   timeFreezeInAir: 0.1
   minimumPlayerDamage: 1
