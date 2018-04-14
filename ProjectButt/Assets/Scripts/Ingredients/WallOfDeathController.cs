@@ -28,7 +28,7 @@ public class WallOfDeathController : MonoBehaviour {
     float durationScreenShake = 0.5f;
 
     [SerializeField]
-    float outOfBoundsMultiplayer = 2;
+    float outOfBoundsDelay = 5f;
     [SerializeField]
     float outOfBoundsMaximum = 3;
 
@@ -64,18 +64,13 @@ public class WallOfDeathController : MonoBehaviour {
 
         float maximumY = Camera.main.transform.position.y + 1.7025f + cameraOrthoSize + outOfBoundsMaximum;//VARIABLE VARIABLE VARIABLE
 
-        if (transform.position.y > maximumY && false)//Broken
+        if (transform.position.y > maximumY)//Broken
         {
-            transform.position = new Vector3(transform.position.x, maximumY, transform.position.z);
-            moveTowardPosition = new Vector3(transform.position.x, transform.position.y + 1, transform.position.z);
             return;
         }
         else
         {
             float multiplier = 1;
-
-            if (transform.position.y > Camera.main.transform.position.y + cameraOrthoSize + 1.7025f)
-                multiplier = outOfBoundsMultiplayer;
 
             if (goingUp)
                 goUp(multiplier);
@@ -143,6 +138,17 @@ public class WallOfDeathController : MonoBehaviour {
             CameraShaker.instance.startCameraShake(durationScreenShake, 15f, 0.25f);
 
         yield return new WaitForSeconds(delayGoingUp);
+        goingUp = true;
+    }
+
+    IEnumerator waitingOutbounds()
+    {
+        goingUp = false;
+        StopCoroutine("goDown");
+        yield return new WaitForSeconds(outOfBoundsDelay);
+        float maximumY = Camera.main.transform.position.y + 1.7025f + cameraOrthoSize + outOfBoundsMaximum;//VARIABLE VARIABLE VARIABLE
+        transform.position = new Vector3(transform.position.x, maximumY - 1, transform.position.z);
+        moveTowardPosition = new Vector3(transform.position.x, transform.position.y + 1, transform.position.z);
         goingUp = true;
     }
 }

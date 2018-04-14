@@ -5452,7 +5452,7 @@ MonoBehaviour:
   - minimumFloor: 1
     ratioBlock: 4
     ratioMetal: 4
-    ratioSaw: 4
+    ratioSaw: 0
     maxNbrMetal: 0
     maxNbrSaw: 2
     maxLenghtSaw: 2
@@ -9696,7 +9696,7 @@ Prefab:
     - target: {fileID: 61142031770020748, guid: 28fba8864523a374fa4881d765b9b954,
         type: 2}
       propertyPath: m_Offset.y
-      value: -15.4375
+      value: -15.25
       objectReference: {fileID: 0}
     - target: {fileID: 61142031770020748, guid: 28fba8864523a374fa4881d765b9b954,
         type: 2}
@@ -9741,7 +9741,7 @@ Prefab:
     - target: {fileID: 114723614715682294, guid: 28fba8864523a374fa4881d765b9b954,
         type: 2}
       propertyPath: outOfBoundsMaximum
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114723614715682294, guid: 28fba8864523a374fa4881d765b9b954,
         type: 2}
