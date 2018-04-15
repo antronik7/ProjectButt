@@ -91,6 +91,7 @@ public class PlayerController : MonoBehaviour {
     bool disableGameplay = false;
     bool enableRunning = true;
     bool enableJumping = true;
+    bool againstWall = false;
 
     Rigidbody2D rBody;
     Collider2D myCollider;
@@ -149,6 +150,7 @@ public class PlayerController : MonoBehaviour {
             }
             else if (playerState == PlayerState.WallJumping)
             {
+                againstWall = false;
                 InverseDirection();
                 Walk();
                 Jump(wallJumpForce);
@@ -188,7 +190,6 @@ public class PlayerController : MonoBehaviour {
             return;
 
         bool grounded = GroundCheck();
-        bool againstWall = WallCheck();
 
         if (playerState == PlayerState.WallJumping)
             rBody.velocity = new Vector2(rBody.velocity.x, Mathf.Max(maxWallJumpFallSpeed, rBody.velocity.y + wallJumpFallSpeed));
@@ -220,8 +221,11 @@ public class PlayerController : MonoBehaviour {
         if (againstWall)
         {
             if (grounded)
+            {
                 InverseDirection();
-            else
+                againstWall = false;
+            }
+            else if(playerState != PlayerState.WallJumping)
             {
                 playerState = PlayerState.WallJumping;
                 animator.SetTrigger("WallSliding");
@@ -284,6 +288,12 @@ public class PlayerController : MonoBehaviour {
         }
 
         return false;
+    }
+
+    void OnCollisionEnter2D(Collision2D coll)
+    {
+        if (coll.gameObject.layer == 9)
+            againstWall = true;
     }
 
     bool WallCheck()

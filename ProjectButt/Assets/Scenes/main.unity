@@ -2625,11 +2625,11 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 555636229}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 12, z: 0}
+  m_LocalPosition: {x: 0, y: 11, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &555636232
 Rigidbody2D:
@@ -5452,7 +5452,7 @@ MonoBehaviour:
   - minimumFloor: 1
     ratioBlock: 4
     ratioMetal: 4
-    ratioSaw: 0
+    ratioSaw: 4
     maxNbrMetal: 0
     maxNbrSaw: 2
     maxLenghtSaw: 2
@@ -9415,7 +9415,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetToFollow: {fileID: 555636231}
   cameraOffset: -1.7025
-  cameraFollowDelay: 0.05
+  cameraFollowDelay: 0
   followIfPlayerHigher: 0
 --- !u!4 &1773622104 stripped
 Transform:
@@ -9654,7 +9654,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4466532222564406, guid: 28fba8864523a374fa4881d765b9b954, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 11
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4466532222564406, guid: 28fba8864523a374fa4881d765b9b954, type: 2}
       propertyPath: m_LocalPosition.z
@@ -9678,11 +9678,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4466532222564406, guid: 28fba8864523a374fa4881d765b9b954, type: 2}
       propertyPath: m_RootOrder
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 1413901610464374, guid: 28fba8864523a374fa4881d765b9b954, type: 2}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4969368497154766, guid: 28fba8864523a374fa4881d765b9b954, type: 2}
       propertyPath: m_LocalPosition.y
@@ -9726,7 +9726,7 @@ Prefab:
     - target: {fileID: 114723614715682294, guid: 28fba8864523a374fa4881d765b9b954,
         type: 2}
       propertyPath: wallRules.Array.data[0].delayGoingDown
-      value: 0.5
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 114723614715682294, guid: 28fba8864523a374fa4881d765b9b954,
         type: 2}
@@ -9741,7 +9741,7 @@ Prefab:
     - target: {fileID: 114723614715682294, guid: 28fba8864523a374fa4881d765b9b954,
         type: 2}
       propertyPath: outOfBoundsMaximum
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114723614715682294, guid: 28fba8864523a374fa4881d765b9b954,
         type: 2}
@@ -9752,6 +9752,11 @@ Prefab:
         type: 2}
       propertyPath: outOfBoundsMultiplayer
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114723614715682294, guid: 28fba8864523a374fa4881d765b9b954,
+        type: 2}
+      propertyPath: outOfBoundsDelay
+      value: 0.25
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 28fba8864523a374fa4881d765b9b954, type: 2}

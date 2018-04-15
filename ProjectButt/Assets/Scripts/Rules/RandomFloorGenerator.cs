@@ -164,25 +164,26 @@ public class RandomFloorGenerator : MonoBehaviour {
                 else
                 {
                     ++currentNbrSaw;
-
-                    if (currentNbrSaw >= floorsRules[currentFloorRulesIndex].maxNbrSaw)
-                    {
-                        canPlaceSaw = false;
-                        currentRatioSaw = 0;
-                    }
-
                 }
             }
             else
             {
                 if (canPlaceSaw)
                 {
-                    ++currentDistancePreviousSaw;
-
-                    if (currentDistancePreviousSaw >= floorsRules[currentFloorRulesIndex].minDistanceBetweenSaw)
-                        currentRatioSaw = ratioSaw;
-                    else
+                    if (currentNbrSaw >= floorsRules[currentFloorRulesIndex].maxNbrSaw)
+                    {
+                        canPlaceSaw = false;
                         currentRatioSaw = 0;
+                    }
+                    else
+                    {
+                        ++currentDistancePreviousSaw;
+
+                        if (currentDistancePreviousSaw >= floorsRules[currentFloorRulesIndex].minDistanceBetweenSaw)
+                            currentRatioSaw = ratioSaw;
+                        else
+                            currentRatioSaw = 0;
+                    }
                 }
             }
 

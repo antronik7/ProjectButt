@@ -62,18 +62,18 @@ public class WallOfDeathController : MonoBehaviour {
         if (!move)
             return;
 
-        float maximumY = Camera.main.transform.position.y + 1.7025f + cameraOrthoSize + outOfBoundsMaximum;//VARIABLE VARIABLE VARIABLE
+        float maximumY = Camera.main.transform.position.y + cameraOrthoSize + outOfBoundsMaximum + 0.51f;//VARIABLE VARIABLE VARIABLE
 
-        if (transform.position.y > maximumY)//Broken
+        if (!doingAnimation && transform.position.y > maximumY)//Broken
         {
+            StopAllCoroutines();
+            StartCoroutine("waitingOutbounds");
             return;
         }
         else
         {
-            float multiplier = 1;
-
             if (goingUp)
-                goUp(multiplier);
+                goUp();
         }
     }
 
@@ -94,27 +94,24 @@ public class WallOfDeathController : MonoBehaviour {
         move = false;
     }
 
-    void goUp(float multiplier)
+    void goUp()
     {
         float step = wallRules[currentFloorRulesIndex].speedGoingUp * Time.deltaTime;
 
         if (doingAnimation)
             step = speedGoingUpAnim;
 
-        step *= multiplier;
         transform.position = Vector3.MoveTowards(transform.position, moveTowardPosition, step);
         if (transform.position.y == moveTowardPosition.y)
         {
-            IEnumerator coroutine;
-            coroutine = goDown(multiplier);
-            StartCoroutine(coroutine);
+            StartCoroutine("goDown");
         }
     }
 
-    IEnumerator goDown(float multiplier)
+    IEnumerator goDown()
     {
-        float delayGoingDown = wallRules[currentFloorRulesIndex].delayGoingDown / multiplier;
-        float delayGoingUp = wallRules[currentFloorRulesIndex].delayGoingUp / multiplier;
+        float delayGoingDown = wallRules[currentFloorRulesIndex].delayGoingDown;
+        float delayGoingUp = wallRules[currentFloorRulesIndex].delayGoingUp;
         if(doingAnimation)
         {
             ++animationStep;
@@ -134,8 +131,7 @@ public class WallOfDeathController : MonoBehaviour {
         transform.position = new Vector3(transform.position.x, moveTowardPosition.y - 2, transform.position.z);
         moveTowardPosition = new Vector3(transform.position.x, transform.position.y + 1, transform.position.z);
 
-        if(multiplier == 1)
-            CameraShaker.instance.startCameraShake(durationScreenShake, 15f, 0.25f);
+        CameraShaker.instance.startCameraShake(durationScreenShake, 15f, 0.25f);
 
         yield return new WaitForSeconds(delayGoingUp);
         goingUp = true;
@@ -144,11 +140,10 @@ public class WallOfDeathController : MonoBehaviour {
     IEnumerator waitingOutbounds()
     {
         goingUp = false;
-        StopCoroutine("goDown");
+        float maximumY = Camera.main.transform.position.y + cameraOrthoSize + outOfBoundsMaximum + 0.5f;//VARIABLE VARIABLE VARIABLE
+        transform.position = new Vector3(transform.position.x, maximumY, transform.position.z);
+        moveTowardPosition = transform.position;
         yield return new WaitForSeconds(outOfBoundsDelay);
-        float maximumY = Camera.main.transform.position.y + 1.7025f + cameraOrthoSize + outOfBoundsMaximum;//VARIABLE VARIABLE VARIABLE
-        transform.position = new Vector3(transform.position.x, maximumY - 1, transform.position.z);
-        moveTowardPosition = new Vector3(transform.position.x, transform.position.y + 1, transform.position.z);
-        goingUp = true;
+        StartCoroutine("goDown");
     }
 }
