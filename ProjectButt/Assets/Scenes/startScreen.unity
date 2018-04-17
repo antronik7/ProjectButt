@@ -251,12 +251,12 @@ MonoBehaviour:
   playerHP: 1
   initialMovementSpeed: 0
   allowHoldJump: 1
-  maxJumpForce: 11
-  minJumpForce: 5
+  maxJumpForce: 8
+  minJumpForce: 3
   wallJumpFallSpeed: -0.5
   maxWallJumpFallSpeed: -2.5
-  wallJumpForce: 11
-  groundPoundForce: 15
+  wallJumpForce: 8
+  groundPoundForce: 25
   timeFreezeInAir: 0.1
   minimumPlayerDamage: 1
   maximumPlayerDamage: 1
@@ -863,7 +863,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -368599727
-  m_SortingLayer: -2
+  m_SortingLayer: -3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: b92e2b2253365e34ea73f0d62847c119, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -1098,7 +1098,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: '( v 0.3.2 )
+  m_Text: '( v 0.3.3 )
 
 '
 --- !u!222 &1461798401

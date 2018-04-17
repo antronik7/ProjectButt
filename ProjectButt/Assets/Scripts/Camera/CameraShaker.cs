@@ -59,5 +59,6 @@ public class CameraShaker : MonoBehaviour {
             yield return null;
         }
         cameraTransform.localPosition = originalPosition;
+        previousMagnitude = 0;
     }
 }

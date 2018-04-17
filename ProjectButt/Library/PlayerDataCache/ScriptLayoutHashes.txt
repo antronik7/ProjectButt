@@ -4,7 +4,7 @@ Assets/Scenes/logo.unity
 Assets/Scenes/startScreen.unity
 Assets/Scenes/main.unity
 SceneListEnd?
-56ac2dde0e3ca7803ccf45d03aac652a Assembly-CSharp.dll:.WallOfDeathController
+2f2e437a475ea1418698d86edd37f7f5 Assembly-CSharp.dll:.WallOfDeathController
 fbe81cfe9e0e0362982880d3d1f9585a Assembly-CSharp.dll:.CameraController
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.Timeline.dll:UnityEngine.Timeline.ActivationPlayableAsset
 dbc29a6f2739d277c10da432d73adb6d UnityEngine.Timeline.dll:UnityEngine.Timeline.ActivationTrack

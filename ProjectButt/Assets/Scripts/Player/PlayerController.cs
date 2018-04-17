@@ -9,11 +9,11 @@ public class PlayerController : MonoBehaviour {
         Running,
         Jumping,
         GroundPounding,
-        Falling,
         Grounded,
         CrashingTroughBlocks,
         GroundedRecovory,
-        WallJumping
+        WallJumping,
+        Turning
     }
 
     [Header("HP")]
@@ -133,11 +133,15 @@ public class PlayerController : MonoBehaviour {
         // Inputs
         if (enableJumping && (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)))
         {
-            if(playerState == PlayerState.Running || playerState == PlayerState.GroundedRecovory)
+            if(playerState == PlayerState.Running || playerState == PlayerState.GroundedRecovory || playerState == PlayerState.Turning)
             {
                 startJumpHeight = transform.position.y;
 
                 if (playerState == PlayerState.GroundedRecovory)
+                {
+                    Walk();
+                }
+                else if (playerState == PlayerState.Turning)
                 {
                     Walk();
                 }
@@ -205,17 +209,19 @@ public class PlayerController : MonoBehaviour {
                 playerState = PlayerState.Grounded; // FUNCTION FUNCTION FUNCTION
                 animator.SetTrigger("Grounded");
             }
-            else if (playerState != PlayerState.Grounded && playerState != PlayerState.CrashingTroughBlocks && playerState != PlayerState.Running)
+            else if (playerState != PlayerState.WallJumping && playerState != PlayerState.Turning && playerState != PlayerState.Grounded && playerState != PlayerState.CrashingTroughBlocks && playerState != PlayerState.Running)
             {
-                rBody.velocity = Vector3.zero;
-                playerState = PlayerState.Running;
-                animator.SetTrigger("Running");
+                StartWalking();
             }
         }
         else
         {
             if (playerState == PlayerState.Running)
-                playerState = PlayerState.Falling;
+            {
+                rBody.velocity = Vector3.zero;
+                playerState = PlayerState.Jumping;
+                animator.SetTrigger("Jumping");
+            }
         }
 
         if (againstWall)
@@ -224,6 +230,8 @@ public class PlayerController : MonoBehaviour {
             {
                 InverseDirection();
                 againstWall = false;
+                playerState = PlayerState.Turning;
+                animator.SetTrigger("Turning");
             }
             else if(playerState != PlayerState.WallJumping)
             {
@@ -261,6 +269,13 @@ public class PlayerController : MonoBehaviour {
     {
         rBody.gravityScale = gravityScale;
         rBody.velocity = new Vector3(0f, groundPoundForce * -1, 0f);
+    }
+
+    public void StartWalking()
+    {
+        rBody.velocity = Vector3.zero;
+        playerState = PlayerState.Running;
+        animator.SetTrigger("Running");
     }
 
     bool GroundCheck()

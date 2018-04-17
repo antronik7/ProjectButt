@@ -5452,7 +5452,7 @@ MonoBehaviour:
   - minimumFloor: 1
     ratioBlock: 4
     ratioMetal: 4
-    ratioSaw: 4
+    ratioSaw: 3
     maxNbrMetal: 0
     maxNbrSaw: 2
     maxLenghtSaw: 2
@@ -9415,7 +9415,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetToFollow: {fileID: 555636231}
   cameraOffset: -1.7025
-  cameraFollowDelay: 0
+  cameraFollowDelay: 0.05
   followIfPlayerHigher: 0
 --- !u!4 &1773622104 stripped
 Transform:
@@ -9682,7 +9682,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1413901610464374, guid: 28fba8864523a374fa4881d765b9b954, type: 2}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4969368497154766, guid: 28fba8864523a374fa4881d765b9b954, type: 2}
       propertyPath: m_LocalPosition.y
