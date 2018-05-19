@@ -80,16 +80,14 @@ public class RandomFloorGenerator : MonoBehaviour {
         {
             previousFloorBlocks[i] = BlockTypes.Block;// Maybe a list
         }
-
-        GenerateOneFloor();
-        GenerateOneFloor();
-        GenerateOneFloor();
     }
 
     // Use this for initialization
     void Start()
     {
-
+        GenerateOneFloor();
+        GenerateOneFloor();
+        GenerateOneFloor();
     }
 
     // Update is called once per frame
@@ -363,6 +361,7 @@ public class RandomFloorGenerator : MonoBehaviour {
                 currentIndexSaw3 = 0;
         }
 
+        GameManager.instance.AddFloorY(currentFloorY);
         currentFloorY -= floorsDistance;
     }
 }

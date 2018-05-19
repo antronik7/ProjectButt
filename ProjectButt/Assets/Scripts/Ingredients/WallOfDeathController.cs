@@ -40,6 +40,7 @@ public class WallOfDeathController : MonoBehaviour {
     int animationStep = 0;
     bool move = false;
     bool goingUp = true;
+    bool waitingOutOfBounds = false;
 
 	// Use this for initialization
 	void Start () {
@@ -64,8 +65,9 @@ public class WallOfDeathController : MonoBehaviour {
 
         float maximumY = Camera.main.transform.position.y + cameraOrthoSize + outOfBoundsMaximum + 0.51f;//VARIABLE VARIABLE VARIABLE
 
-        if (!doingAnimation && transform.position.y > maximumY)//Broken
+        if (!waitingOutOfBounds && !doingAnimation && transform.position.y > maximumY)
         {
+            waitingOutOfBounds = true;
             StopAllCoroutines();
             StartCoroutine("waitingOutbounds");
             return;
@@ -140,10 +142,18 @@ public class WallOfDeathController : MonoBehaviour {
     IEnumerator waitingOutbounds()
     {
         goingUp = false;
-        float maximumY = Camera.main.transform.position.y + cameraOrthoSize + outOfBoundsMaximum + 0.5f;//VARIABLE VARIABLE VARIABLE
-        transform.position = new Vector3(transform.position.x, maximumY, transform.position.z);
-        moveTowardPosition = transform.position;
+        float maximumY = GameManager.instance.GetCurrentFloorY() + cameraOrthoSize + outOfBoundsMaximum;//VARIABLE VARIABLE VARIABLE
+        Vector3 waitingPosition = new Vector3(transform.position.x, maximumY, transform.position.z);
+        moveTowardPosition = waitingPosition;
+
+        while(waitingPosition.y <= Camera.main.transform.position.y + cameraOrthoSize + 0.25f)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+
+        transform.position = waitingPosition;
         yield return new WaitForSeconds(outOfBoundsDelay);
         StartCoroutine("goDown");
+        waitingOutOfBounds = false;
     }
 }

@@ -37,6 +37,11 @@ public class PlayerController : MonoBehaviour {
     float maxWallJumpFallSpeed = -1f;
     [SerializeField]
     float wallJumpForce = 1f;
+    [SerializeField]
+    float fallMultiplier = 2.5f;
+    [SerializeField]
+    float lowJumpMultiplier = 2f;
+
 
     [Header("Ground Pound")]
     [SerializeField]
@@ -121,14 +126,23 @@ public class PlayerController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+        if(rBody.velocity.y < 0)
+        {
+            rBody.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
+        }
+        else if (rBody.velocity.y > 0 && !(Input.GetKey(KeyCode.Space) || Input.GetMouseButton(0)))
+        {
+            rBody.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
+        }
+
         if (disableGameplay)
             return;
 
         // States
-        if (enableRunning && playerState == PlayerState.Running)
-        {
-            Walk();
-        }
+        //if (enableRunning && playerState == PlayerState.Running)
+        //{
+        //    Walk();
+        //}
 
         // Inputs
         if (enableJumping && (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)))
@@ -145,10 +159,10 @@ public class PlayerController : MonoBehaviour {
                 {
                     Walk();
                 }
-                //else
-                //{
-                //    Walk();
-                //}
+                else
+                {
+                    Walk();
+                }
 
                 Jump(maxJumpForce);
             }
@@ -165,13 +179,13 @@ public class PlayerController : MonoBehaviour {
             }
         }
 
-        if(allowHoldJump && (Input.GetKeyUp(KeyCode.Space) || Input.GetMouseButtonUp(0)))
-        {
-            if(playerState != PlayerState.GroundPounding && rBody.velocity.y > minJumpForce)
-            {
-                Jump(minJumpForce);
-            }
-        }
+        //if(allowHoldJump && (Input.GetKeyUp(KeyCode.Space) || Input.GetMouseButtonUp(0)))
+        //{
+        //    if(playerState != PlayerState.GroundPounding && playerState != PlayerState.WallJumping && rBody.velocity.y > minJumpForce)
+        //    {
+        //        Jump(minJumpForce);
+        //    }
+        //}
 
         if (!Input.GetKey(KeyCode.Space) && !Input.GetMouseButton(0))
         {
@@ -183,7 +197,7 @@ public class PlayerController : MonoBehaviour {
             }
         }
 
-        Debug.Log(playerState);
+        //Debug.Log(playerState);
         //Debug.DrawRay(transform.position, Vector3.right * raycastLength, Color.red);
         //Debug.Log(playerState);
     }
@@ -198,7 +212,7 @@ public class PlayerController : MonoBehaviour {
         if (playerState == PlayerState.WallJumping)
             rBody.velocity = new Vector2(rBody.velocity.x, Mathf.Max(maxWallJumpFallSpeed, rBody.velocity.y + wallJumpFallSpeed));
 
-        if (grounded)
+        if (grounded && rBody.velocity.y <= 0)
         {
             if (playerState == PlayerState.GroundPounding)
             {
@@ -221,6 +235,7 @@ public class PlayerController : MonoBehaviour {
                 rBody.velocity = Vector3.zero;
                 playerState = PlayerState.Jumping;
                 animator.SetTrigger("Jumping");
+                Debug.Log("NONONONONONON");
             }
         }
 
@@ -253,6 +268,7 @@ public class PlayerController : MonoBehaviour {
         playerState = PlayerState.Jumping;
         animator.SetTrigger("Jumping");
         rBody.velocity = new Vector3(rBody.velocity.x, jumpForce, 0f);
+        Debug.Log("Jumping");
     }
 
     void StartGroundPound()

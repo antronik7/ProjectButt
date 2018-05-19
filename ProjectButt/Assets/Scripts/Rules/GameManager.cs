@@ -24,6 +24,8 @@ public class GameManager : MonoBehaviour {
     public int floor = 1;
     [HideInInspector]
     public float playerY = 0;
+    [HideInInspector]
+    List<float> floorsY;
 
     PlayerController playerController;
     BackgroundScroller backgroundScroller;
@@ -46,6 +48,8 @@ public class GameManager : MonoBehaviour {
         playerController = player.GetComponent<PlayerController>();
         backgroundScroller = GetComponent<BackgroundScroller>();
         playerY = player.position.y;
+        floorsY = new List<float>();
+        AddFloorY(0);
     }
 
     // Use this for initialization
@@ -84,11 +88,22 @@ public class GameManager : MonoBehaviour {
     public void AddFloor()
     {
         ++floor;
+        floorsY.RemoveAt(0);
 
         if (stopGeneratingFloor)
             return;
 
         floorGenerator.GenerateOneFloor();
+    }
+
+    public void AddFloorY(float y)
+    {
+        floorsY.Add(y);
+    }
+
+    public float GetCurrentFloorY()
+    {
+        return floorsY[0];
     }
 
     public void PlayerGotKill()
