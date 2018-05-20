@@ -256,6 +256,8 @@ MonoBehaviour:
   wallJumpFallSpeed: -0.5
   maxWallJumpFallSpeed: -2.5
   wallJumpForce: 8
+  fallMultiplier: 2.5
+  lowJumpMultiplier: 2
   groundPoundForce: 25
   timeFreezeInAir: 0.1
   minimumPlayerDamage: 1
@@ -514,7 +516,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: 21300004, guid: 5d240c40ac526b046a037fc8762795e4, type: 3}
+  m_Sprite: {fileID: 21300000, guid: bd1448b4718e68949ac3ea0e4fad6296, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -678,6 +680,8 @@ MonoBehaviour:
   wallJumpFallSpeed: -0.1
   maxWallJumpFallSpeed: -1
   wallJumpForce: 1
+  fallMultiplier: 2.5
+  lowJumpMultiplier: 2
   groundPoundForce: 12.5
   timeFreezeInAir: 0.25
   minimumPlayerDamage: 1
