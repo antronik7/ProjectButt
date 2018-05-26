@@ -216,7 +216,7 @@ public class PlayerController : MonoBehaviour {
         {
             if (playerState == PlayerState.GroundPounding)
             {
-                DamageBlocks();
+                LaunchGroundPoundAoE();
             }
             else if (playerState == PlayerState.CrashingTroughBlocks)
             {
@@ -337,7 +337,7 @@ public class PlayerController : MonoBehaviour {
         return false;
     }
 
-    void DamageBlocks()
+    void LaunchGroundPoundAoE()
     {
         int nbrBlocksDestroyed = 0;
 
