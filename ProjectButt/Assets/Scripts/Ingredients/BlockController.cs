@@ -35,15 +35,15 @@ public class BlockController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
-	}
+
+    }
 
     public void PlaceBlock(float x, float y)
     {
         transform.position = new Vector3(x, y, transform.position.z);
     }
 
-    public void DamageBlock(int damageValue)
+    public void DamageBlock(int damageValue, float impactSleepDuration)
     {
         if (!canTakeDamage)
             return;
@@ -56,6 +56,7 @@ public class BlockController : MonoBehaviour {
             DestroyBlock();
         else
             ChangeBlockVisual();
+
     }
 
     public void ResetBlock()

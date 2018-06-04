@@ -203,7 +203,7 @@ MonoBehaviour:
   crackSprite: {fileID: 212657447574577732}
   impactSprite: {fileID: 212219971428093220}
   impactSpriteDuration: 0.0001
-  impactSleepDuration: 0.05
+  impactSleepDuration: 1
   positionPool: {x: -100, y: 0, z: 0}
   numberChunks: 4
   chunks:

@@ -58,6 +58,8 @@ public class PlayerController : MonoBehaviour {
     float percentageDamageMaximum = 0.8f;
     [SerializeField]
     float GroundedRecoverForce = 1.5f;
+    [SerializeField]
+    float ImpactSleepDuration = 0.05f;
 
     [Header("Camera Shake")]
     [SerializeField]
@@ -139,10 +141,10 @@ public class PlayerController : MonoBehaviour {
             return;
 
         // States
-        //if (enableRunning && playerState == PlayerState.Running)
-        //{
-        //    Walk();
-        //}
+        if (enableRunning && playerState == PlayerState.Running)
+        {
+            Walk();
+        }
 
         // Inputs
         if (enableJumping && (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)))
@@ -349,7 +351,7 @@ public class PlayerController : MonoBehaviour {
 
             if(block != null)// MAYBE USE TAG
             {
-                block.DamageBlock(CalculateDamage());
+                block.DamageBlock(CalculateDamage(), ImpactSleepDuration);
                 if (block.GetCurrentHp() <= 0)
                 {
                     ++nbrBlocksDestroyed;
