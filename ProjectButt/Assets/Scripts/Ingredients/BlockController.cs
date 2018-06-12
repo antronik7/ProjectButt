@@ -17,8 +17,6 @@ public class BlockController : MonoBehaviour {
     [SerializeField]
     float impactSpriteDuration = 0.2f;
     [SerializeField]
-    float impactSleepDuration = 0.02f;
-    [SerializeField]
     Vector3 positionPool;
     [SerializeField]
     float numberChunks;
@@ -43,20 +41,17 @@ public class BlockController : MonoBehaviour {
         transform.position = new Vector3(x, y, transform.position.z);
     }
 
-    public void DamageBlock(int damageValue, float impactSleepDuration)
+    public void DamageBlock(int damageValue, float impactSleepDuration, float playerPreviousVelocity)
     {
         if (!canTakeDamage)
             return;
 
         currentBlockHP -= damageValue;
-        StartCoroutine("ShowImpact");
-        GameManager.instance.Sleep(impactSleepDuration);
+        ShowImpact();
+        ChangeBlockVisual();
 
-        if (currentBlockHP <= 0)
-            DestroyBlock();
-        else
-            ChangeBlockVisual();
-
+        IEnumerator coroutine = applyDamage(impactSleepDuration, playerPreviousVelocity);
+        StartCoroutine(coroutine);
     }
 
     public void ResetBlock()
@@ -68,6 +63,26 @@ public class BlockController : MonoBehaviour {
     public int GetCurrentHp()
     {
         return currentBlockHP;
+    }
+
+    IEnumerator applyDamage(float impactSleepDuration, float previousVelocity)
+    {
+        Time.timeScale = 0.0f;
+
+        float sleepEndTime = Time.realtimeSinceStartup + impactSleepDuration;
+        while (Time.realtimeSinceStartup < sleepEndTime)
+        {
+            yield return 0;
+        }
+
+        HideImpact();
+
+        if(currentBlockHP <= 0)
+            DestroyBlock();
+
+        GameManager.instance.SetVelocityPlayer(previousVelocity);
+
+        Time.timeScale = 1;
     }
 
     void DestroyBlock()
@@ -85,7 +100,7 @@ public class BlockController : MonoBehaviour {
         if (!canTakeDamage)
             return;
 
-        if (currentBlockHP == 1)
+        if (currentBlockHP <= 1)
             crackSprite.enabled = true;
         else
             crackSprite.enabled = false;
@@ -105,10 +120,13 @@ public class BlockController : MonoBehaviour {
         }
     }
 
-    IEnumerator ShowImpact()
+    void ShowImpact()
     {
         impactSprite.enabled = true;
-        yield return new WaitForSeconds(impactSpriteDuration);
+    }
+
+    void HideImpact()
+    {
         impactSprite.enabled = false;
     }
 }

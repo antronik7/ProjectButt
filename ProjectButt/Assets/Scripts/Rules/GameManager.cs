@@ -121,6 +121,11 @@ public class GameManager : MonoBehaviour {
         StartCoroutine(coroutine);
     }
 
+    public void SetVelocityPlayer(float velocity)
+    {
+        playerController.SetVelocity(velocity);
+    }
+
     IEnumerator RestartLevel()
     {
         yield return new WaitForSeconds(3f);

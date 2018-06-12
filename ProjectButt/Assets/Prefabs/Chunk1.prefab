@@ -99,8 +99,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2dbae845315c73041a8f5f38efe3338d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minForce: 500
-  maxForce: 500
+  minForce: 750
+  maxForce: 750
   minRotation: 10
   maxRotation: 30
   lifeTime: 5

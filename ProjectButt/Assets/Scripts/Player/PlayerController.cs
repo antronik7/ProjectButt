@@ -351,7 +351,7 @@ public class PlayerController : MonoBehaviour {
 
             if(block != null)// MAYBE USE TAG
             {
-                block.DamageBlock(CalculateDamage(), ImpactSleepDuration);
+                block.DamageBlock(CalculateDamage(), ImpactSleepDuration, previousVelocityY);
                 if (block.GetCurrentHp() <= 0)
                 {
                     ++nbrBlocksDestroyed;
@@ -362,7 +362,6 @@ public class PlayerController : MonoBehaviour {
         if (nbrBlocksDestroyed == nbrBlocksHit)
         {
             playerState = PlayerState.CrashingTroughBlocks;
-            rBody.velocity = new Vector3(0f, previousVelocityY, 0f);
         }
         else
         {
@@ -456,5 +455,10 @@ public class PlayerController : MonoBehaviour {
     public void DisablePlayerJumping()
     {
         enableJumping = false;
+    }
+
+    public void SetVelocity(float velocity)
+    {
+        rBody.velocity = new Vector3(0f, velocity, 0f);
     }
 }
