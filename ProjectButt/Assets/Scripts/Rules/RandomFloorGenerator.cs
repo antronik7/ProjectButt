@@ -24,6 +24,13 @@ public class RandomFloorGenerator : MonoBehaviour {
         public int minDistanceBetweenSaw = 1;
     }
 
+    [System.Serializable]
+    class ObstaclesPoolElements
+    {
+        public GameObject obstacle;
+        public int probability;
+    }
+
     [SerializeField]
     FloorRules[] floorsRules;
     [SerializeField]
