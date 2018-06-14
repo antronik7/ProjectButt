@@ -12,6 +12,13 @@ public class RandomFloorGenerator : MonoBehaviour {
     }
 
     [System.Serializable]
+    class ObstaclesPoolElements
+    {
+        public GameObject obstacle;
+        public int probability;
+    }
+
+    [System.Serializable]
     class FloorRules
     {
         public int minimumFloor = 1;
@@ -22,13 +29,8 @@ public class RandomFloorGenerator : MonoBehaviour {
         public int maxNbrSaw = 1;
         public int maxLenghtSaw = 2;
         public int minDistanceBetweenSaw = 1;
-    }
-
-    [System.Serializable]
-    class ObstaclesPoolElements
-    {
-        public GameObject obstacle;
-        public int probability;
+        public int obstacleMaxProbability = 100;
+        public ObstaclesPoolElements[] obstaclesPoolElements;
     }
 
     [SerializeField]
@@ -368,7 +370,43 @@ public class RandomFloorGenerator : MonoBehaviour {
                 currentIndexSaw3 = 0;
         }
 
+        GenerateObstacle();
+
         GameManager.instance.AddFloorY(currentFloorY);
         currentFloorY -= floorsDistance;
+    }
+
+    void GenerateObstacle()
+    {
+        FloorRules floorRules = floorsRules[currentFloorRulesIndex];
+
+        int ramdomNumber = Random.Range(1, floorRules.obstacleMaxProbability);
+
+        int currentProbability = 0;
+        int indexChosenObstacle = -1;
+
+        for (int i = 0; i < floorRules.obstaclesPoolElements.Length; ++i)
+        {
+            int obstacleProbability = floorRules.obstaclesPoolElements[i].probability;
+
+            if (obstacleProbability <= 0)
+                continue;
+
+            currentProbability += obstacleProbability;
+
+            if (ramdomNumber <= currentProbability)
+            {
+                indexChosenObstacle = i;
+                break;
+            }
+        }
+
+        // We did not roll a number to place an obstacle or there was a problem, so we can stop using this function...
+        if (indexChosenObstacle <= 0)
+            return;
+
+        Vector4 obstaclePosition = floorRules.obstaclesPoolElements[indexChosenObstacle].obstacle.transform.position;// function function function
+        floorRules.obstaclesPoolElements[indexChosenObstacle].obstacle.transform.position = new Vector3(obstaclePosition.x, currentFloorY, obstaclePosition.z);
+        floorRules.obstaclesPoolElements[indexChosenObstacle].obstacle.GetComponent<ObstacleInitializer>().Initialize();
     }
 }
