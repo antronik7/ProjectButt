@@ -2,7 +2,7 @@
 
 public class ObstacleInitializer : MonoBehaviour {
 
-    public virtual void Initialize ()
+    public virtual void Initialize (float initialY)
     {
 
     }

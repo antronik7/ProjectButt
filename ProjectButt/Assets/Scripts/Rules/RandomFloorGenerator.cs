@@ -14,8 +14,11 @@ public class RandomFloorGenerator : MonoBehaviour {
     [System.Serializable]
     class ObstaclesPoolElements
     {
-        public GameObject obstacle;
+        public ObstacleInitializer[] obstacles;
         public int probability;
+
+        [HideInInspector]
+        public int currentIndex = 0;
     }
 
     [System.Serializable]
@@ -405,8 +408,15 @@ public class RandomFloorGenerator : MonoBehaviour {
         if (indexChosenObstacle <= 0)
             return;
 
-        Vector4 obstaclePosition = floorRules.obstaclesPoolElements[indexChosenObstacle].obstacle.transform.position;// function function function
-        floorRules.obstaclesPoolElements[indexChosenObstacle].obstacle.transform.position = new Vector3(obstaclePosition.x, currentFloorY, obstaclePosition.z);
-        floorRules.obstaclesPoolElements[indexChosenObstacle].obstacle.GetComponent<ObstacleInitializer>().Initialize();
+        int currentIndexObstacle = floorRules.obstaclesPoolElements[indexChosenObstacle].currentIndex;
+
+        floorRules.obstaclesPoolElements[indexChosenObstacle].obstacles[currentIndexObstacle].Initialize(currentFloorY);
+
+        ++currentFloorRulesIndex;
+        floorRules.obstaclesPoolElements[indexChosenObstacle].currentIndex = currentFloorRulesIndex;
+
+        int obstaclesSize = floorRules.obstaclesPoolElements.Length;
+        if (currentFloorRulesIndex >= obstaclesSize)
+            floorRules.obstaclesPoolElements[indexChosenObstacle].currentIndex = 0;
     }
 }

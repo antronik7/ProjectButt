@@ -13,6 +13,12 @@ public class MovingSawController : MonoBehaviour {
 
     int currentIndexPositions = 0;
     bool indexUp = true;
+    Vector3 InitialLocalPosition;
+
+    void Awake()
+    {
+        InitialLocalPosition = transform.localPosition;
+    }
 
     // Use this for initialization
     void Start () {
@@ -52,5 +58,11 @@ public class MovingSawController : MonoBehaviour {
                     currentIndexPositions = 0;
             }
         }
+    }
+
+    public void ResetMovingSaw()
+    {
+        transform.localPosition = InitialLocalPosition;
+        currentIndexPositions = 0;
     }
 }
