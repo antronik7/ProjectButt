@@ -405,18 +405,18 @@ public class RandomFloorGenerator : MonoBehaviour {
         }
 
         // We did not roll a number to place an obstacle or there was a problem, so we can stop using this function...
-        if (indexChosenObstacle <= 0)
+        if (indexChosenObstacle < 0)
             return;
 
         int currentIndexObstacle = floorRules.obstaclesPoolElements[indexChosenObstacle].currentIndex;
 
         floorRules.obstaclesPoolElements[indexChosenObstacle].obstacles[currentIndexObstacle].Initialize(currentFloorY);
 
-        ++currentFloorRulesIndex;
-        floorRules.obstaclesPoolElements[indexChosenObstacle].currentIndex = currentFloorRulesIndex;
+        ++currentIndexObstacle;
+        floorRules.obstaclesPoolElements[indexChosenObstacle].currentIndex = currentIndexObstacle;
 
-        int obstaclesSize = floorRules.obstaclesPoolElements.Length;
-        if (currentFloorRulesIndex >= obstaclesSize)
+        int obstaclesSize = floorRules.obstaclesPoolElements[indexChosenObstacle].obstacles.Length;
+        if (currentIndexObstacle >= obstaclesSize)
             floorRules.obstaclesPoolElements[indexChosenObstacle].currentIndex = 0;
     }
 }

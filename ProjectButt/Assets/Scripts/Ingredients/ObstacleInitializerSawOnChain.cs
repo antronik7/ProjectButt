@@ -6,7 +6,7 @@ public class ObstacleInitializerSawOnChain : ObstacleInitializer {
 
     public override void Initialize(float initialY)
     {
-        transform.position = new Vector3(transform.position.x, initialY + offsetY, transform.position.z);
+        transform.position = new Vector3(0f, initialY + offsetY, transform.position.z);
         movingSawController.ResetMovingSaw();
     }
 }
