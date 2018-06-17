@@ -86,6 +86,8 @@ public class PlayerController : MonoBehaviour {
     float deadCameraShakeSpeed = 1f;
     [SerializeField]
     float deadCameraShakeMagnitude = 2f;
+    [SerializeField]
+    float deathGravityScale = 1f;
 
     float currentMovementSpeed;
     float currentDirection;
@@ -421,7 +423,7 @@ public class PlayerController : MonoBehaviour {
 
     void PlayerDeath()
     {
-        rBody.gravityScale = 3;// VARIABLE VARIABLE VARIABLE
+        rBody.gravityScale = deathGravityScale;
         rBody.velocity = new Vector3(0f, 10f, 0f); // VARIABLE VARIABLE VARIABLE
         animator.SetTrigger("Dead");
     }
