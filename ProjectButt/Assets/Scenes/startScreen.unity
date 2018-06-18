@@ -265,6 +265,7 @@ MonoBehaviour:
   percentageDamageMinimum: 0.2
   percentageDamageMaximum: 0.85
   GroundedRecoverForce: 4
+  ImpactSleepDuration: 0.05
   cameraShakeTime: 0.15
   cameraShakeSpeed: 20
   cameraShakeMagnitude: 1
@@ -279,6 +280,7 @@ MonoBehaviour:
   deadCameraShakeTime: 0.5
   deadCameraShakeSpeed: 15
   deadCameraShakeMagnitude: 1
+  deathGravityScale: 1
 --- !u!95 &280429494
 Animator:
   serializedVersion: 3
@@ -689,6 +691,7 @@ MonoBehaviour:
   percentageDamageMinimum: 0.2
   percentageDamageMaximum: 0.8
   GroundedRecoverForce: 3
+  ImpactSleepDuration: 0.05
   cameraShakeTime: 0.15
   cameraShakeSpeed: 15
   cameraShakeMagnitude: 0.25
@@ -703,6 +706,7 @@ MonoBehaviour:
   deadCameraShakeTime: 1
   deadCameraShakeSpeed: 1
   deadCameraShakeMagnitude: 2
+  deathGravityScale: 1
 --- !u!95 &555636235
 Animator:
   serializedVersion: 3
@@ -1102,7 +1106,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: '( v 0.3.3 )
+  m_Text: '( v 0.4.0 )
 
 '
 --- !u!222 &1461798401
@@ -1375,7 +1379,6 @@ MonoBehaviour:
   crackSprite: {fileID: 2024147928}
   impactSprite: {fileID: 404876755}
   impactSpriteDuration: 0.2
-  impactSleepDuration: 0.02
   positionPool: {x: -100, y: -100, z: 0}
   numberChunks: 12
   chunks:
